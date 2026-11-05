@@ -7,11 +7,10 @@ import {
 } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js";
 
 import {
-    doc,
-    getDoc,
     collection,
     addDoc,
     deleteDoc,
+    doc,
     query,
     orderBy,
     onSnapshot,
@@ -20,7 +19,14 @@ import {
 
 
 // ======================================
-// 1. GET HTML ELEMENTS
+// 1. ADMIN CONFIGURATION
+// ======================================
+
+const ADMIN_EMAIL = "lloydbelieve66@gmail.com";
+
+
+// ======================================
+// 2. GET HTML ELEMENTS
 // ======================================
 
 const adminEmail = document.getElementById("adminEmail");
@@ -44,7 +50,7 @@ const announcementCount = document.getElementById("announcementCount");
 
 
 // ======================================
-// 2. ADMIN VARIABLES
+// 3. ADMIN VARIABLES
 // ======================================
 
 let currentAdmin = null;
@@ -52,7 +58,7 @@ let stopAnnouncements = null;
 
 
 // ======================================
-// 3. FORMAT ANNOUNCEMENT DATE
+// 4. FORMAT ANNOUNCEMENT DATE
 // ======================================
 
 function formatDate(timestamp) {
@@ -67,7 +73,7 @@ function formatDate(timestamp) {
 
 
 // ======================================
-// 4. CREATE ANNOUNCEMENT CARD
+// 5. CREATE ANNOUNCEMENT CARD
 // ======================================
 
 function createAnnouncementCard(data, documentId, allowDelete = false) {
@@ -144,7 +150,7 @@ function createAnnouncementCard(data, documentId, allowDelete = false) {
 
 
 // ======================================
-// 5. CHECK ADMINISTRATOR LOGIN
+// 6. CHECK ADMINISTRATOR LOGIN
 // ======================================
 
 onAuthStateChanged(auth, async (user) => {
@@ -156,64 +162,52 @@ onAuthStateChanged(auth, async (user) => {
 
     }
 
-    try {
+    // CHECK ADMIN EMAIL
 
-        const adminRef = doc(db, "admins", user.uid);
+    if (user.email?.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
 
-        const adminSnap = await getDoc(adminRef);
+        alert("Access denied. Administrator permission required.");
 
-        if (!adminSnap.exists() || adminSnap.data().role !== "admin") {
-
-            alert("Access denied. Administrator permission required.");
-
-            window.location.replace("dashboard.html");
-            return;
-
-        }
-
-        currentAdmin = user;
-
-
-        // ADMIN PROFILE
-
-        const email = user.email || "Administrator";
-
-        const name = user.displayName || email.split("@")[0];
-
-        adminEmail.textContent = "Logged in as: " + email;
-
-        adminName.textContent = name;
-
-        adminAvatar.textContent = name.charAt(0).toUpperCase();
-
-        settingsAdminEmail.textContent = email;
-
-
-        // LOAD ANNOUNCEMENTS
-
-        loadAnnouncements();
-
-    } catch (error) {
-
-        console.error("Admin verification error:", error);
-
-        adminEmail.textContent =
-            "Unable to verify administrator access. Check your connection and refresh.";
+        window.location.replace("dashboard.html");
+        return;
 
     }
+
+    currentAdmin = user;
+
+
+    // ADMIN PROFILE
+
+    const email = user.email || "Administrator";
+
+    const name = user.displayName || email.split("@")[0];
+
+    adminEmail.textContent = "Logged in as: " + email;
+
+    adminName.textContent = name;
+
+    adminAvatar.textContent = name.charAt(0).toUpperCase();
+
+    settingsAdminEmail.textContent = email;
+
+
+    // LOAD ANNOUNCEMENTS
+
+    loadAnnouncements();
 
 });
 
 
 // ======================================
-// 6. PUBLISH ANNOUNCEMENT
+// 7. PUBLISH ANNOUNCEMENT
 // ======================================
 
 announcementForm.addEventListener("submit", async (event) => {
 
     event.preventDefault();
 
-    if (!currentAdmin) {
+    if (!currentAdmin ||
+        currentAdmin.email?.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
 
         formMessage.textContent =
             "Administrator verification is incomplete.";
@@ -297,7 +291,7 @@ announcementForm.addEventListener("submit", async (event) => {
 
 
 // ======================================
-// 7. LOAD ANNOUNCEMENTS IN REAL TIME
+// 8. LOAD ANNOUNCEMENTS IN REAL TIME
 // ======================================
 
 function loadAnnouncements() {
@@ -310,8 +304,6 @@ function loadAnnouncements() {
     );
 
 
-    // STOP PREVIOUS LISTENER IF ONE EXISTS
-
     if (stopAnnouncements) {
 
         stopAnnouncements();
@@ -319,28 +311,18 @@ function loadAnnouncements() {
     }
 
 
-    // START REAL-TIME LISTENER
-
     stopAnnouncements = onSnapshot(
 
         announcementsQuery,
 
         (snapshot) => {
 
-
-            // UPDATE ANNOUNCEMENT COUNT
-
             announcementCount.textContent = snapshot.size;
-
-
-            // CLEAR OLD ANNOUNCEMENTS
 
             announcementList.replaceChildren();
 
             overviewAnnouncements.replaceChildren();
 
-
-            // CHECK IF THERE ARE NO ANNOUNCEMENTS
 
             if (snapshot.empty) {
 
@@ -355,12 +337,8 @@ function loadAnnouncements() {
             }
 
 
-            // STORE RECENT ANNOUNCEMENTS
-
             let recentNumber = 0;
 
-
-            // DISPLAY ANNOUNCEMENTS
 
             snapshot.forEach((documentSnapshot) => {
 
@@ -380,7 +358,7 @@ function loadAnnouncements() {
                 announcementList.appendChild(fullCard);
 
 
-                // SHOW ONLY THE THREE LATEST ON OVERVIEW
+                // THREE LATEST ANNOUNCEMENTS
 
                 if (recentNumber < 3) {
 
@@ -401,8 +379,6 @@ function loadAnnouncements() {
         },
 
 
-        // FIRESTORE ERROR
-
         (error) => {
 
             console.error("Announcement loading error:", error);
@@ -421,7 +397,7 @@ function loadAnnouncements() {
 
 
 // ======================================
-// 8. LOGOUT
+// 9. LOGOUT
 // ======================================
 
 logoutBtn.addEventListener("click", async () => {
