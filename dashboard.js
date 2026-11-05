@@ -98,22 +98,30 @@ function loadStudentAnnouncements() {
         return;
     }
 
+    // Fetch only published announcements.
+    // No orderBy means no composite index is needed.
+
     const announcementsQuery = query(
-    collection(db, "announcements"),
-    where("status", "==", "published")
-);
+        collection(db, "announcements"),
+        where("status", "==", "published")
+    );
+
+    // Stop any previous listener.
 
     if (stopStudentAnnouncements) {
         stopStudentAnnouncements();
     }
 
     stopStudentAnnouncements = onSnapshot(
+
         announcementsQuery,
 
         (snapshot) => {
 
             homeContainer.replaceChildren();
             updatesContainer.replaceChildren();
+
+            // Check whether announcements exist.
 
             if (snapshot.empty) {
 
@@ -126,25 +134,41 @@ function loadStudentAnnouncements() {
                 return;
             }
 
-            let count = 0;
+            // Convert Firestore documents into an array.
 
-            snapshot.forEach((documentSnapshot) => {
+            const announcements = snapshot.docs.map((documentSnapshot) => ({
+                id: documentSnapshot.id,
+                ...documentSnapshot.data()
+            }));
 
-                const data = documentSnapshot.data();
+            // Sort announcements from newest to oldest.
+
+            announcements.sort((a, b) => {
+
+                const dateA = a.createdAt?.toMillis?.() || 0;
+                const dateB = b.createdAt?.toMillis?.() || 0;
+
+                return dateB - dateA;
+
+            });
+
+            // Display announcements.
+
+            announcements.forEach((data, index) => {
 
                 // Display every announcement on Updates.
+
                 updatesContainer.appendChild(
                     createStudentAnnouncement(data)
                 );
 
                 // Display only the latest three on Home.
-                if (count < 3) {
+
+                if (index < 3) {
 
                     homeContainer.appendChild(
                         createStudentAnnouncement(data)
                     );
-
-                    count++;
 
                 }
 
@@ -154,7 +178,12 @@ function loadStudentAnnouncements() {
 
         (error) => {
 
-            console.error("Student announcement loading error:", error);
+            console.error(
+                "Student announcement loading error:",
+                error
+            );
+
+            console.error("Firestore error code:", error.code);
 
             homeContainer.textContent =
                 "Unable to load announcements. Please refresh.";
@@ -162,9 +191,8 @@ function loadStudentAnnouncements() {
             updatesContainer.textContent =
                 "Unable to load departmental updates. Please refresh.";
 
-            console.error("Firestore error code:", error.code);
-
         }
+
     );
 
 }
@@ -214,28 +242,50 @@ onAuthStateChanged(auth, async (user) => {
         }
 
         // Get student name.
+
         const fullName =
             profile.fullName || user.displayName || "Student";
 
         // Display student information.
-        document.getElementById("userName").textContent = fullName;
 
-        document.getElementById("userAvatar").textContent =
-            fullName.charAt(0).toUpperCase();
+        const userName = document.getElementById("userName");
+        const userAvatar = document.getElementById("userAvatar");
 
-        document.getElementById("profileFullName").textContent =
-            fullName;
+        const profileFullName = document.getElementById("profileFullName");
+        const profileMatric = document.getElementById("profileMatric");
+        const profileEmail = document.getElementById("profileEmail");
+        const profilePhone = document.getElementById("profilePhone");
 
-        document.getElementById("profileMatric").textContent =
-            profile.matricNumber || "Not provided";
+        if (userName) {
+            userName.textContent = fullName;
+        }
 
-        document.getElementById("profileEmail").textContent =
-            profile.email || user.email || "Not provided";
+        if (userAvatar) {
+            userAvatar.textContent =
+                fullName.charAt(0).toUpperCase();
+        }
 
-        document.getElementById("profilePhone").textContent =
-            profile.phone || "Not provided";
+        if (profileFullName) {
+            profileFullName.textContent = fullName;
+        }
+
+        if (profileMatric) {
+            profileMatric.textContent =
+                profile.matricNumber || "Not provided";
+        }
+
+        if (profileEmail) {
+            profileEmail.textContent =
+                profile.email || user.email || "Not provided";
+        }
+
+        if (profilePhone) {
+            profilePhone.textContent =
+                profile.phone || "Not provided";
+        }
 
         // Load announcements after confirming the student profile.
+
         loadStudentAnnouncements();
 
     } catch (error) {
@@ -314,7 +364,8 @@ function showPage(page) {
     const pageTitle = document.getElementById("pageTitle");
 
     if (pageTitle) {
-        pageTitle.textContent = pageTitles[page] || "PHY EDU CONNECT";
+        pageTitle.textContent =
+            pageTitles[page] || "PHY EDU CONNECT";
     }
 
     document.querySelectorAll("[data-page]").forEach((button) => {
