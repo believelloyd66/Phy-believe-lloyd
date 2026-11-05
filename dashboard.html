@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -769,195 +768,262 @@ footer {
 </head>
 
 <body>
-
 <div class="layout">
 
-<!-- DESKTOP SIDEBAR -->
+    <!-- DESKTOP SIDEBAR -->
+    <aside class="sidebar">
 
-<aside class="sidebar">
-
-    <div class="brand">
-        <div class="brand-icon">⚛</div>
-        <div>
-            <h2>PHY EDU CONNECT</h2>
-            <small>STUDENT COMMUNITY</small>
-        </div>
-    </div>
-
-    <div class="nav-label">MAIN MENU</div>
-
-    <button class="nav-item active" data-page="home">
-        <span class="nav-icon">⌂</span> Home
-    </button>
-
-    <button class="nav-item" data-page="updates">
-        <span class="nav-icon">♧</span> Updates
-    </button>
-
-    <button class="nav-item" data-page="courses">
-        <span class="nav-icon">▤</span> Courses
-    </button>
-
-    <button class="nav-item" data-page="gallery">
-        <span class="nav-icon">▧</span> Gallery
-    </button>
-
-    <div class="sidebar-bottom">
-        <p>PHY EDU CONNECT</p>
-        <p>Built for students, by students.</p>
-        <p>Version 1.0</p>
-    </div>
-
-</aside>
-
-
-<!-- MAIN AREA -->
-
-<div class="main">
-
-    <!-- TOPBAR -->
-
-    <div class="topbar">
-
-        <div>
-            <div class="page-title" id="pageTitle">
-                Welcome Home
-            </div>
-            <div class="page-subtitle">
-                Physics Education Community
+        <div class="brand">
+            <div class="brand-icon">⚛</div>
+            <div>
+                <h2>PHY EDU CONNECT</h2>
+                <small>STUDENT COMMUNITY</small>
             </div>
         </div>
 
-        <div class="top-right">
-            <span class="version">VERSION 1.0</span>
-            <div class="profile-summary">
-                <div class="avatar" id="userAvatar">U</div>
-                <div class="profile-name" id="userName">Loading...</div>
-            </div>
-            <button class="logout-button" id="logoutButton" type="button">Log Out</button>
+        <div class="nav-label">MAIN MENU</div>
+
+        <button class="nav-item active" data-page="home">
+            <span class="nav-icon">⌂</span> Home
+        </button>
+
+        <button class="nav-item" data-page="updates">
+            <span class="nav-icon">♧</span> Updates
+        </button>
+
+        <button class="nav-item" data-page="courses">
+            <span class="nav-icon">▤</span> Courses
+        </button>
+
+        <button class="nav-item" data-page="gallery">
+            <span class="nav-icon">▧</span> Gallery
+        </button>
+
+        <div class="sidebar-bottom">
+            <p>PHY EDU CONNECT</p>
+            <p>Built for students, by students.</p>
+            <p>Version 1.0</p>
         </div>
 
-    </div>
+    </aside>
 
 
-    <main class="content">
+    <!-- MAIN AREA -->
+    <div class="main">
 
-        <!-- HOME PAGE -->
+        <!-- TOPBAR -->
+        <div class="topbar">
 
-        <div class="view active" id="home">
+            <div>
+                <div class="page-title" id="pageTitle">
+                    Welcome Home
+                </div>
 
-            <div class="welcome">
-
-                <div class="welcome-decoration">⚛</div>
-
-                <small>YOUR DEPARTMENT. YOUR COMMUNITY.</small>
-
-                <h1>
-                    Welcome to<br>
-                    PHY EDU CONNECT.
-                </h1>
-
-                <p>
-                    Your shared space to stay informed,
-                    explore academic resources and connect
-                    with the Physics Education community.
-                </p>
-
-                <a href="#" class="welcome-link"
-                   onclick="showPage('updates'); return false;">
-                    Explore Updates →
-                </a>
-
-            </div>
-
-            <div class="panel" style="margin-bottom:24px;">
-                <div class="panel-title">Your Student Profile</div>
-                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;">
-                    <div><small style="color:var(--muted);">Full name</small><p id="profileFullName" style="font-size:13px;font-weight:700;color:var(--navy);">Loading...</p></div>
-                    <div><small style="color:var(--muted);">Matriculation number</small><p id="profileMatric" style="font-size:13px;font-weight:700;color:var(--navy);">Loading...</p></div>
-                    <div><small style="color:var(--muted);">Email address</small><p id="profileEmail" style="font-size:13px;font-weight:700;color:var(--navy);overflow-wrap:anywhere;">Loading...</p></div>
-                    <div><small style="color:var(--muted);">Phone number</small><p id="profilePhone" style="font-size:13px;font-weight:700;color:var(--navy);">Loading...</p></div>
+                <div class="page-subtitle">
+                    Physics Education Community
                 </div>
             </div>
 
-            <div class="section-head">
-                <div>
-                    <h2>Explore Your Space</h2>
-                    <p>Everything important, in one place.</p>
+            <div class="top-right">
+                <span class="version">VERSION 1.0</span>
+
+                <div class="profile-summary">
+                    <div class="avatar" id="userAvatar">U</div>
+                    <div class="profile-name" id="userName">Loading...</div>
                 </div>
+
+                <button class="logout-button" id="logoutButton" type="button">
+                    Log Out
+                </button>
             </div>
 
-
-            <div class="quick-grid">
-
-                <button class="card" onclick="showPage('updates')">
-                    <div class="card-icon">📢</div>
-                    <h3>Announcements</h3>
-                    <p>Department information and notices.</p>
-                </button>
-
-                <button class="card" onclick="showPage('courses')">
-                    <div class="card-icon">📚</div>
-                    <h3>Courses</h3>
-                    <p>Explore your academic courses.</p>
-                </button>
-
-                <button class="card" onclick="showPage('gallery')">
-                    <div class="card-icon">📸</div>
-                    <h3>Gallery</h3>
-                    <p>Our departmental memories.</p>
-                </button>
-
-                <button class="card" onclick="showPage('updates')">
-                    <div class="card-icon">🔔</div>
-                    <h3>Latest Updates</h3>
-                    <p>See what's happening.</p>
-                </button>
-
-            </div>
+        </div>
 
 
-            <div class="two-grid">
+        <main class="content">
 
-                <div class="panel">
+            <!-- HOME PAGE -->
+            <div class="view active" id="home">
+
+                <div class="welcome">
+
+                    <div class="welcome-decoration">⚛</div>
+
+                    <small>YOUR DEPARTMENT. YOUR COMMUNITY.</small>
+
+                    <h1>
+                        Welcome to<br>
+                        PHY EDU CONNECT.
+                    </h1>
+
+                    <p>
+                        Your shared space to stay informed,
+                        explore academic resources and connect
+                        with the Physics Education community.
+                    </p>
+
+                    <a href="#" class="welcome-link"
+                       onclick="showPage('updates'); return false;">
+                        Explore Updates →
+                    </a>
+
+                </div>
+
+
+                <!-- STUDENT PROFILE -->
+                <div class="panel" style="margin-bottom:24px;">
 
                     <div class="panel-title">
-                        Recent Announcements
+                        Your Student Profile
                     </div>
 
-                    <div class="notice">
-                        <small>WELCOME</small>
-                        <h4>Welcome to PHY EDU CONNECT</h4>
-                        <p>
-                            Our student community platform
-                            is now taking shape.
-                        </p>
-                    </div>
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;">
 
-                    <div class="notice">
-                        <small>PLATFORM NEWS</small>
-                        <h4>More Features Coming Soon</h4>
-                        <p>
-                            Look forward to more exciting
-                            additions in future updates.
-                        </p>
-                    </div>
-
-                </div>
-
-
-                <div class="panel">
-
-                    <div class="panel-title">
-                        Community Corner
-                    </div>
-
-                    <div class="empty">
-                        <div style="font-size:30px;margin-bottom:10px;">
-                            ✨
+                        <div>
+                            <small style="color:var(--muted);">Full name</small>
+                            <p id="profileFullName" style="font-size:13px;font-weight:700;color:var(--navy);">
+                                Loading...
+                            </p>
                         </div>
-                        Something exciting is being prepared
-                        for our community.
+
+                        <div>
+                            <small style="color:var(--muted);">Matriculation number</small>
+                            <p id="profileMatric" style="font-size:13px;font-weight:700;color:var(--navy);">
+                                Loading...
+                            </p>
+                        </div>
+
+                        <div>
+                            <small style="color:var(--muted);">Email address</small>
+                            <p id="profileEmail" style="font-size:13px;font-weight:700;color:var(--navy);overflow-wrap:anywhere;">
+                                Loading...
+                            </p>
+                        </div>
+
+                        <div>
+                            <small style="color:var(--muted);">Phone number</small>
+                            <p id="profilePhone" style="font-size:13px;font-weight:700;color:var(--navy);">
+                                Loading...
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <!-- EXPLORE SECTION -->
+                <div class="section-head">
+                    <div>
+                        <h2>Explore Your Space</h2>
+                        <p>Everything important, in one place.</p>
+                    </div>
+                </div>
+
+
+                <div class="quick-grid">
+
+                    <button class="card" onclick="showPage('updates')">
+                        <div class="card-icon">📢</div>
+                        <h3>Announcements</h3>
+                        <p>Department information and notices.</p>
+                    </button>
+
+                    <button class="card" onclick="showPage('courses')">
+                        <div class="card-icon">📚</div>
+                        <h3>Courses</h3>
+                        <p>Explore your academic courses.</p>
+                    </button>
+
+                    <button class="card" onclick="showPage('gallery')">
+                        <div class="card-icon">📸</div>
+                        <h3>Gallery</h3>
+                        <p>Our departmental memories.</p>
+                    </button>
+
+                    <button class="card" onclick="showPage('updates')">
+                        <div class="card-icon">🔔</div>
+                        <h3>Latest Updates</h3>
+                        <p>See what's happening.</p>
+                    </button>
+
+                </div>
+
+
+                <!-- ANNOUNCEMENTS AND COMMUNITY -->
+                <div class="two-grid">
+
+                    <div class="panel">
+
+                        <div class="panel-title">
+                            Recent Announcements
+                        </div>
+
+                        <div id="homeAnnouncements">
+                            <div class="empty">
+                                Loading announcements...
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="panel">
+
+                        <div class="panel-title">
+                            Community Corner
+                        </div>
+
+                        <div class="empty">
+                            <div style="font-size:30px;margin-bottom:10px;">
+                                ✨
+                            </div>
+
+                            Something exciting is being prepared
+                            for our community.
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- COMING SOON -->
+                <div class="section-head">
+                    <div>
+                        <h2>What's Coming?</h2>
+                        <p>More ways to connect and participate.</p>
+                    </div>
+                </div>
+
+
+                <div class="coming-grid">
+
+                    <div class="coming-card">
+                        <div class="card-icon">🎂</div>
+                        <h3>Birthday Corner</h3>
+                        <p>Celebrate our members.</p>
+                        <span class="coming-badge">COMING SOON</span>
+                    </div>
+
+                    <div class="coming-card">
+                        <div class="card-icon">🗳️</div>
+                        <h3>Student Polls</h3>
+                        <p>Share your opinions.</p>
+                        <span class="coming-badge">COMING SOON</span>
+                    </div>
+
+                    <div class="coming-card">
+                        <div class="card-icon">🧠</div>
+                        <h3>Brain Challenge</h3>
+                        <p>Test your knowledge.</p>
+                        <span class="coming-badge">COMING SOON</span>
+                    </div>
+
+                    <div class="coming-card">
+                        <div class="card-icon">💬</div>
+                        <h3>Suggestion Box</h3>
+                        <p>Share your ideas.</p>
+                        <span class="coming-badge">COMING SOON</span>
                     </div>
 
                 </div>
@@ -965,197 +1031,132 @@ footer {
             </div>
 
 
-            <div class="section-head">
-                <div>
-                    <h2>What's Coming?</h2>
-                    <p>More ways to connect and participate.</p>
-                </div>
-            </div>
+            <!-- UPDATES PAGE -->
+            <div class="view" id="updates">
 
+                <div class="page-heading">
+                    <h1>Department Updates</h1>
 
-            <div class="coming-grid">
-
-                <div class="coming-card">
-                    <div class="card-icon">🎂</div>
-                    <h3>Birthday Corner</h3>
-                    <p>Celebrate our members.</p>
-                    <span class="coming-badge">COMING SOON</span>
+                    <p>
+                        Stay informed about what's happening
+                        in Physics Education.
+                    </p>
                 </div>
 
-                <div class="coming-card">
-                    <div class="card-icon">🗳️</div>
-                    <h3>Student Polls</h3>
-                    <p>Share your opinions.</p>
-                    <span class="coming-badge">COMING SOON</span>
-                </div>
-
-                <div class="coming-card">
-                    <div class="card-icon">🧠</div>
-                    <h3>Brain Challenge</h3>
-                    <p>Test your knowledge.</p>
-                    <span class="coming-badge">COMING SOON</span>
-                </div>
-
-                <div class="coming-card">
-                    <div class="card-icon">💬</div>
-                    <h3>Suggestion Box</h3>
-                    <p>Share your ideas.</p>
-                    <span class="coming-badge">COMING SOON</span>
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- UPDATES PAGE -->
-
-        <div class="view" id="updates">
-
-            <div class="page-heading">
-                <h1>Department Updates</h1>
-                <p>
-                    Stay informed about what's happening
-                    in Physics Education.
-                </p>
-            </div>
-
-            <div class="update-item">
-                <span class="update-tag">WELCOME</span>
-                <h3>Welcome to PHY EDU CONNECT</h3>
-                <p>
-                    We're glad to have you here. This platform
-                    is designed to make departmental information
-                    easier to access.
-                </p>
-                <div class="update-date">Platform announcement</div>
-            </div>
-
-            <div class="update-item">
-                <span class="update-tag">PLATFORM NEWS</span>
-                <h3>Our Community Is Growing</h3>
-                <p>
-                    More features and improvements will be
-                    introduced as the platform develops.
-                </p>
-                <div class="update-date">Platform announcement</div>
-            </div>
-
-            <div class="empty">
-                New verified departmental announcements
-                will appear here.
-            </div>
-
-        </div>
-
-
-        <!-- COURSES PAGE -->
-
-        <div class="view" id="courses">
-
-            <div class="page-heading">
-                <h1>Courses & Learning</h1>
-                <p>
-                    Explore departmental courses and
-                    academic learning resources.
-                </p>
-            </div>
-
-            <input
-                type="search"
-                class="search-box"
-                id="courseSearch"
-                placeholder="Search courses or course codes..."
-                aria-label="Search courses"
-            >
-
-            <div class="course-grid" id="courseGrid">
-
-                <div class="course-card">
-                    <span class="course-code">COURSE DIRECTORY</span>
-                    <h3>Physics Courses</h3>
-                    <p>Course information will be added here.</p>
-                </div>
-
-                <div class="course-card">
-                    <span class="course-code">COURSE DIRECTORY</span>
-                    <h3>Education Courses</h3>
-                    <p>Course information will be added here.</p>
-                </div>
-
-                <div class="course-card">
-                    <span class="course-code">COURSE DIRECTORY</span>
-                    <h3>General Studies</h3>
-                    <p>Course information will be added here.</p>
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- GALLERY PAGE -->
-
-        <div class="view" id="gallery">
-
-            <div class="page-heading">
-                <h1>Department Gallery</h1>
-                <p>
-                    Our people, our activities and
-                    our memorable moments.
-                </p>
-            </div>
-
-            <div class="gallery-grid">
-
-                <div class="gallery-item">
-                    <div class="gallery-art">📸</div>
-                    <div class="gallery-caption">
-                        Department Moments
-                        <small>Pictures coming soon</small>
-                    </div>
-                </div>
-
-                <div class="gallery-item">
-                    <div class="gallery-art">🎓</div>
-                    <div class="gallery-caption">
-                        Academic Activities
-                        <small>Pictures coming soon</small>
-                    </div>
-                </div>
-
-                <div class="gallery-item">
-                    <div class="gallery-art">🤝</div>
-                    <div class="gallery-caption">
-                        Our Community
-                        <small>Pictures coming soon</small>
+                <div id="allAnnouncements">
+                    <div class="empty">
+                        Loading announcements...
                     </div>
                 </div>
 
             </div>
 
-        </div>
 
-    </main>
+            <!-- COURSES PAGE -->
+            <div class="view" id="courses">
+
+                <div class="page-heading">
+                    <h1>Courses & Learning</h1>
+
+                    <p>
+                        Explore departmental courses and
+                        academic learning resources.
+                    </p>
+                </div>
+
+                <input
+                    type="search"
+                    class="search-box"
+                    id="courseSearch"
+                    placeholder="Search courses or course codes..."
+                    aria-label="Search courses"
+                >
+
+                <div class="course-grid" id="courseGrid">
+
+                    <div class="course-card">
+                        <span class="course-code">COURSE DIRECTORY</span>
+                        <h3>Physics Courses</h3>
+                        <p>Course information will be added here.</p>
+                    </div>
+
+                    <div class="course-card">
+                        <span class="course-code">COURSE DIRECTORY</span>
+                        <h3>Education Courses</h3>
+                        <p>Course information will be added here.</p>
+                    </div>
+
+                    <div class="course-card">
+                        <span class="course-code">COURSE DIRECTORY</span>
+                        <h3>General Studies</h3>
+                        <p>Course information will be added here.</p>
+                    </div>
+
+                </div>
+
+            </div>
 
 
-    <!-- FOOTER -->
+            <!-- GALLERY PAGE -->
+            <div class="view" id="gallery">
 
-    <footer>
-        © 2026 PHY EDU CONNECT.
-        Designed & Developed by Believe Lloyd.
-        <br><br>
-        An independent student-created platform.
-        Not an official university website.
-    </footer>
+                <div class="page-heading">
+                    <h1>Department Gallery</h1>
 
-</div>
+                    <p>
+                        Our people, our activities and
+                        our memorable moments.
+                    </p>
+                </div>
+
+                <div class="gallery-grid">
+
+                    <div class="gallery-item">
+                        <div class="gallery-art">📸</div>
+                        <div class="gallery-caption">
+                            Department Moments
+                            <small>Pictures coming soon</small>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item">
+                        <div class="gallery-art">🎓</div>
+                        <div class="gallery-caption">
+                            Academic Activities
+                            <small>Pictures coming soon</small>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item">
+                        <div class="gallery-art">🤝</div>
+                        <div class="gallery-caption">
+                            Our Community
+                            <small>Pictures coming soon</small>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+
+
+        <!-- FOOTER -->
+        <footer>
+            © 2026 PHY EDU CONNECT.
+            Designed & Developed by Believe Lloyd.
+            <br><br>
+            An independent student-created platform.
+            Not an official university website.
+        </footer>
+
+    </div>
 
 </div>
 
 
 <!-- MOBILE BOTTOM NAVIGATION -->
-
 <nav class="bottom-nav">
 
     <button class="active" data-page="home">
@@ -1180,67 +1181,293 @@ footer {
 
 </nav>
 
-
 <script type="module">
+
 import { auth, db } from "./firebase-config.js";
-import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
+
+import {
+    onAuthStateChanged,
+    signOut
+} from "https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js";
+
+import {
+    doc,
+    getDoc,
+    collection,
+    query,
+    where,
+    orderBy,
+    onSnapshot
+} from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
+
+
+// ELEMENTS
 
 const logoutButton = document.getElementById("logoutButton");
 
-onAuthStateChanged(auth, async (user) => {
-    if (!user) {
-        window.location.replace("login.html");
+
+// ANNOUNCEMENT LISTENER
+
+let stopStudentAnnouncements = null;
+
+
+// FORMAT ANNOUNCEMENT DATE
+
+function formatAnnouncementDate(timestamp) {
+
+    if (!timestamp || typeof timestamp.toDate !== "function") {
+        return "Date unavailable";
+    }
+
+    return timestamp.toDate().toLocaleString();
+
+}
+
+
+// CREATE ANNOUNCEMENT ELEMENT
+
+function createStudentAnnouncement(data) {
+
+    const item = document.createElement("div");
+    item.className = "update-item";
+
+    const category = document.createElement("span");
+    category.className = "update-tag";
+    category.textContent = data.category || "GENERAL";
+
+    const title = document.createElement("h3");
+    title.textContent = data.title || "Untitled announcement";
+
+    const message = document.createElement("p");
+    message.textContent = data.message || "";
+
+    const date = document.createElement("div");
+    date.className = "update-date";
+    date.textContent = formatAnnouncementDate(data.createdAt);
+
+    item.appendChild(category);
+    item.appendChild(title);
+    item.appendChild(message);
+    item.appendChild(date);
+
+    return item;
+
+}
+
+
+// LOAD ANNOUNCEMENTS FROM FIREBASE
+
+function loadStudentAnnouncements() {
+
+    const homeContainer =
+        document.getElementById("homeAnnouncements");
+
+    const updatesContainer =
+        document.getElementById("allAnnouncements");
+
+    if (!homeContainer || !updatesContainer) {
+        console.error("Announcement containers were not found.");
         return;
     }
 
+    const announcementsQuery = query(
+        collection(db, "announcements"),
+        where("status", "==", "published"),
+        orderBy("createdAt", "desc")
+    );
+
+    if (stopStudentAnnouncements) {
+        stopStudentAnnouncements();
+    }
+
+    stopStudentAnnouncements = onSnapshot(
+
+        announcementsQuery,
+
+        (snapshot) => {
+
+            homeContainer.replaceChildren();
+            updatesContainer.replaceChildren();
+
+            if (snapshot.empty) {
+
+                homeContainer.innerHTML =
+                    '<div class="empty">No announcements yet.</div>';
+
+                updatesContainer.innerHTML =
+                    '<div class="empty">No departmental announcements have been published yet.</div>';
+
+                return;
+            }
+
+            let count = 0;
+
+            snapshot.forEach((documentSnapshot) => {
+
+                const data = documentSnapshot.data();
+
+                // DISPLAY ALL ANNOUNCEMENTS ON UPDATES PAGE
+
+                updatesContainer.appendChild(
+                    createStudentAnnouncement(data)
+                );
+
+                // DISPLAY ONLY THE LATEST THREE ON HOME
+
+                if (count < 3) {
+
+                    homeContainer.appendChild(
+                        createStudentAnnouncement(data)
+                    );
+
+                    count++;
+
+                }
+
+            });
+
+        },
+
+        (error) => {
+
+            console.error(
+                "Student announcement loading error:",
+                error
+            );
+
+            homeContainer.textContent =
+                "Unable to load announcements. Please refresh.";
+
+            updatesContainer.textContent =
+                "Unable to load departmental updates. Please refresh.";
+
+        }
+
+    );
+
+}
+
+
+// STUDENT LOGIN AND PROFILE
+
+onAuthStateChanged(auth, async (user) => {
+
+    if (!user) {
+
+        window.location.replace("login.html");
+        return;
+
+    }
+
     try {
-        const profileSnapshot = await getDoc(doc(db, "users", user.uid));
-        if (!profileSnapshot.exists() || profileSnapshot.data().platform !== "PHY EDU CONNECT") {
-            alert("A PHY EDU CONNECT student profile could not be found for this account. Please create a student account.");
+
+        const profileSnapshot = await getDoc(
+            doc(db, "users", user.uid)
+        );
+
+        if (
+            !profileSnapshot.exists() ||
+            profileSnapshot.data().platform !== "PHY EDU CONNECT"
+        ) {
+
+            alert(
+                "A PHY EDU CONNECT student profile could not be found for this account. Please create a student account."
+            );
+
             await signOut(auth);
+
             window.location.replace("login.html");
+
             return;
+
         }
 
         const profile = profileSnapshot.data();
-        const fullName = profile.fullName || user.displayName || "Student";
+
+        const fullName =
+            profile.fullName || user.displayName || "Student";
+
         document.getElementById("userName").textContent = fullName;
-        document.getElementById("userAvatar").textContent = fullName.charAt(0).toUpperCase();
-        document.getElementById("profileFullName").textContent = fullName;
-        document.getElementById("profileMatric").textContent = profile.matricNumber || "Not provided";
-        document.getElementById("profileEmail").textContent = profile.email || user.email || "Not provided";
-        document.getElementById("profilePhone").textContent = profile.phone || "Not provided";
+
+        document.getElementById("userAvatar").textContent =
+            fullName.charAt(0).toUpperCase();
+
+        document.getElementById("profileFullName").textContent =
+            fullName;
+
+        document.getElementById("profileMatric").textContent =
+            profile.matricNumber || "Not provided";
+
+        document.getElementById("profileEmail").textContent =
+            profile.email || user.email || "Not provided";
+
+        document.getElementById("profilePhone").textContent =
+            profile.phone || "Not provided";
+
+
+        // LOAD STUDENT ANNOUNCEMENTS
+
+        loadStudentAnnouncements();
+
+
     } catch (error) {
+
         console.error("Profile loading error:", error);
-        alert("We could not load your profile. Check your connection and refresh the page.");
+
+        alert(
+            "We could not load your profile. Check your connection and refresh the page."
+        );
+
     }
+
 });
+
+
+// LOGOUT
 
 logoutButton.addEventListener("click", async () => {
+
     logoutButton.disabled = true;
     logoutButton.textContent = "Logging out...";
+
     try {
+
+        // STOP LISTENING TO ANNOUNCEMENTS
+
+        if (stopStudentAnnouncements) {
+            stopStudentAnnouncements();
+            stopStudentAnnouncements = null;
+        }
+
         await signOut(auth);
+
         window.location.replace("login.html");
+
     } catch (error) {
+
         console.error("Logout error:", error);
+
         alert("Could not log out. Please try again.");
+
         logoutButton.disabled = false;
         logoutButton.textContent = "Log Out";
-    }
-});
 
+    }
+
+});
 
 
 // PAGE NAVIGATION
 
 const pageTitles = {
+
     home: "Welcome Home",
     updates: "Department Updates",
     courses: "Courses & Learning",
     gallery: "Department Gallery"
+
 };
+
 
 function showPage(page) {
 
@@ -1283,7 +1510,9 @@ window.showPage = showPage;
 document.querySelectorAll("[data-page]").forEach(button => {
 
     button.addEventListener("click", () => {
+
         showPage(button.dataset.page);
+
     });
 
 });
@@ -1307,7 +1536,6 @@ courseSearch.addEventListener("input", function() {
     });
 
 });
-
 
 </script>
 
