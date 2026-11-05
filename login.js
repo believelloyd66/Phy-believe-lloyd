@@ -1,3 +1,4 @@
+
 import { auth, db } from "./firebase-config.js";
 
 import {
@@ -12,6 +13,8 @@ import {
   doc,
   getDoc
 } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
+
+const ADMIN_EMAIL = "lloydbelieve66@gmail.com";
 
 const form = document.getElementById("loginForm");
 const button = document.getElementById("loginButton");
@@ -42,14 +45,8 @@ form.addEventListener("submit", async (event) => {
 
     const user = credential.user;
 
-    // FIRST: CHECK ADMIN ACCESS
-    const adminRef = doc(db, "admins", user.uid);
-    const adminProfile = await getDoc(adminRef);
-
-    if (
-      adminProfile.exists() &&
-      adminProfile.data().role === "admin"
-    ) {
+    // FIRST: CHECK ADMIN EMAIL
+    if (user.email?.toLowerCase() === ADMIN_EMAIL) {
       window.location.href = "admin.html";
       return;
     }
