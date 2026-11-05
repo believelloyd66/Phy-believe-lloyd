@@ -1,0 +1,1261 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#102A46">
+
+<title>Admin Dashboard | PHY EDU CONNECT</title>
+
+<style>
+:root {
+    --navy: #102A46;
+    --blue: #2878B9;
+    --light-blue: #EAF3FB;
+    --bg: #F4F7FB;
+    --white: #FFFFFF;
+    --text: #243447;
+    --muted: #8190A0;
+    --border: #E7EDF3;
+    --green: #238B65;
+    --radius: 16px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+button, input, select, textarea {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar {
+    width: 245px;
+    background: var(--navy);
+    color: white;
+    padding: 25px 16px;
+    position: fixed;
+    inset: 0 auto 0 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 20;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 0 10px 30px;
+}
+
+.brand-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+    background: #FFFFFF1A;
+    display: grid;
+    place-items: center;
+    font-size: 23px;
+}
+
+.brand h2 {
+    font-size: 14px;
+    letter-spacing: .4px;
+}
+
+.brand small {
+    display: block;
+    color: #A9C4DD;
+    font-size: 10px;
+    margin-top: 3px;
+}
+
+.nav-label {
+    color: #91A9C0;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    padding: 12px;
+}
+
+.nav-item {
+    width: 100%;
+    border: none;
+    background: transparent;
+    color: #C4D3E1;
+    padding: 13px 14px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    text-align: left;
+    font-size: 13px;
+    margin-bottom: 5px;
+    transition: .2s;
+}
+
+.nav-item:hover,
+.nav-item.active {
+    background: #FFFFFF17;
+    color: white;
+}
+
+.nav-item.active {
+    border-left: 3px solid #69B9F4;
+}
+
+.nav-icon {
+    font-size: 19px;
+    width: 23px;
+    text-align: center;
+}
+
+.sidebar-bottom {
+    margin-top: auto;
+    border-top: 1px solid #FFFFFF20;
+    padding: 20px 10px 5px;
+}
+
+.sidebar-bottom p {
+    font-size: 11px;
+    color: #A9C4DD;
+    line-height: 1.8;
+}
+
+/* MAIN AREA */
+
+.main {
+    margin-left: 245px;
+    width: calc(100% - 245px);
+    min-width: 0;
+}
+
+.topbar {
+    height: 75px;
+    background: white;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 35px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.page-title {
+    font-size: 17px;
+    color: var(--navy);
+    font-weight: 750;
+}
+
+.page-subtitle {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 3px;
+}
+
+.top-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.admin-badge {
+    font-size: 10px;
+    color: var(--blue);
+    background: var(--light-blue);
+    padding: 7px 10px;
+    border-radius: 20px;
+    font-weight: 700;
+}
+
+.profile-summary {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.avatar {
+    height: 36px;
+    width: 36px;
+    background: var(--navy);
+    color: white;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.profile-name {
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--navy);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.logout-button {
+    border: 1px solid var(--border);
+    background: white;
+    color: var(--navy);
+    padding: 9px 12px;
+    border-radius: 9px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.logout-button:hover {
+    background: var(--light-blue);
+}
+
+/* CONTENT */
+
+.content {
+    max-width: 1300px;
+    margin: auto;
+    padding: 32px 35px 60px;
+}
+
+.view {
+    display: none;
+    animation: appear .25s ease;
+}
+
+.view.active {
+    display: block;
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* PAGE HEADINGS */
+
+.page-heading {
+    margin-bottom: 25px;
+}
+
+.page-heading h1 {
+    color: var(--navy);
+    font-size: 25px;
+}
+
+.page-heading p {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 6px;
+}
+
+/* WELCOME */
+
+.welcome {
+    background:
+        radial-gradient(circle at 90% 15%,
+        #428AC0 0%, transparent 32%),
+        linear-gradient(120deg, #102A46, #1D5684);
+    color: white;
+    padding: 32px;
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 25px;
+}
+
+.welcome small {
+    color: #A9D6F7;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+.welcome h1 {
+    font-size: clamp(24px, 4vw, 34px);
+    margin: 13px 0;
+}
+
+.welcome p {
+    color: #D4E4F1;
+    font-size: 13px;
+    max-width: 500px;
+    line-height: 1.6;
+}
+
+.welcome-decoration {
+    position: absolute;
+    right: 45px;
+    top: 15px;
+    font-size: 105px;
+    opacity: .15;
+}
+
+/* STATISTICS */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 25px;
+}
+
+.stat-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+}
+
+.stat-icon {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    background: var(--light-blue);
+    border-radius: 12px;
+    font-size: 20px;
+    margin-bottom: 13px;
+}
+
+.stat-card p {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.stat-card h2 {
+    color: var(--navy);
+    font-size: 25px;
+    margin-top: 5px;
+}
+
+/* PANELS */
+
+.panel {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+    margin-bottom: 20px;
+    min-width: 0;
+}
+
+.panel-title {
+    color: var(--navy);
+    font-size: 16px;
+    font-weight: 750;
+    margin-bottom: 17px;
+}
+
+.two-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 18px;
+}
+
+.empty {
+    background: var(--bg);
+    padding: 24px;
+    border-radius: 11px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+/* ANNOUNCEMENT FORM */
+
+label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text);
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    outline: none;
+    margin-bottom: 18px;
+    font-size: 13px;
+    background: white;
+    color: var(--text);
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--blue);
+}
+
+textarea {
+    min-height: 150px;
+    resize: vertical;
+    line-height: 1.6;
+}
+
+.publish {
+    width: 100%;
+    background: var(--blue);
+    color: white;
+    padding: 14px;
+    border: none;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.publish:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+.message {
+    font-size: 12px;
+    margin-top: 12px;
+    line-height: 1.5;
+}
+
+/* ANNOUNCEMENT LIST */
+
+.announcement {
+    border: 1px solid var(--border);
+    padding: 17px;
+    border-radius: 11px;
+    margin-bottom: 13px;
+}
+
+.announcement h3 {
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: var(--navy);
+}
+
+.announcement p {
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--muted);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    margin-bottom: 12px;
+}
+
+.category {
+    display: inline-block;
+    background: var(--light-blue);
+    color: var(--blue);
+    padding: 5px 9px;
+    border-radius: 20px;
+    font-size: 10px;
+    margin-bottom: 10px;
+}
+
+.date {
+    color: var(--muted);
+    font-size: 10px;
+    margin-bottom: 12px;
+}
+
+.delete {
+    background: #FFF0F0;
+    color: #C53030;
+    font-size: 11px;
+    padding: 9px 12px;
+    border-radius: 8px;
+}
+
+/* COMING SOON */
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+}
+
+.feature-card {
+    background: white;
+    border: 1px solid var(--border);
+    padding: 20px;
+    border-radius: 14px;
+}
+
+.feature-icon {
+    width: 43px;
+    height: 43px;
+    display: grid;
+    place-items: center;
+    background: var(--light-blue);
+    border-radius: 12px;
+    font-size: 21px;
+    margin-bottom: 13px;
+}
+
+.feature-card h3 {
+    color: var(--navy);
+    font-size: 13px;
+}
+
+.feature-card p {
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.5;
+    margin-top: 6px;
+}
+
+.coming-badge {
+    display: inline-block;
+    margin-top: 13px;
+    background: var(--light-blue);
+    color: var(--blue);
+    border-radius: 20px;
+    font-size: 9px;
+    font-weight: 800;
+    padding: 6px 9px;
+}
+
+/* MORE PAGE LINKS */
+
+.more-link {
+    width: 100%;
+    border: 1px solid var(--border);
+    background: white;
+    padding: 17px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    text-align: left;
+    margin-bottom: 12px;
+    color: var(--navy);
+}
+
+.more-link:hover {
+    border-color: #B5D5EF;
+    background: #FAFCFF;
+}
+
+.more-link span:first-child {
+    font-size: 23px;
+}
+
+.more-link strong {
+    display: block;
+    font-size: 13px;
+}
+
+.more-link small {
+    display: block;
+    color: var(--muted);
+    font-size: 10px;
+    margin-top: 4px;
+}
+
+/* FOOTER */
+
+footer {
+    padding: 20px 35px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 10px;
+}
+
+/* MOBILE NAV */
+
+.bottom-nav {
+    display: none;
+}
+
+/* RESPONSIVE */
+
+@media(max-width: 1000px) {
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .feature-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width: 700px) {
+    .sidebar {
+        display: none;
+    }
+
+    .main {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .topbar {
+        height: 65px;
+        padding: 0 15px;
+    }
+
+    .content {
+        padding: 23px 16px 110px;
+    }
+
+    .welcome {
+        padding: 27px 22px;
+    }
+
+    .welcome-decoration {
+        right: 10px;
+        top: 25px;
+        font-size: 70px;
+    }
+
+    .welcome h1 {
+        font-size: 25px;
+        max-width: 280px;
+    }
+
+    .welcome p {
+        max-width: 300px;
+        font-size: 12px;
+    }
+
+    .admin-badge {
+        display: none;
+    }
+
+    .profile-name {
+        max-width: 90px;
+    }
+
+    .top-right {
+        gap: 8px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .stat-card {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 14px;
+    }
+
+    .stat-icon {
+        margin: 0;
+        flex-shrink: 0;
+    }
+
+    .stat-card h2 {
+        font-size: 21px;
+    }
+
+    .two-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .feature-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .panel {
+        padding: 18px;
+    }
+
+    .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        background: white;
+        border-top: 1px solid var(--border);
+        padding: 10px 4px calc(10px + env(safe-area-inset-bottom));
+        z-index: 100;
+    }
+
+    .bottom-nav button {
+        background: transparent;
+        border: none;
+        color: var(--muted);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        font-size: 10px;
+        min-width: 55px;
+        padding: 3px;
+    }
+
+    .bottom-nav button span:first-child {
+        font-size: 20px;
+    }
+
+    .bottom-nav button.active {
+        color: var(--blue);
+        font-weight: 800;
+    }
+
+    footer {
+        padding-bottom: 35px;
+    }
+}
+
+@media(max-width: 360px) {
+    .page-title {
+        font-size: 14px;
+    }
+
+    .logout-button {
+        padding: 8px;
+    }
+
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="layout">
+
+<!-- DESKTOP SIDEBAR -->
+
+<aside class="sidebar">
+
+    <div class="brand">
+        <div class="brand-icon">⚛</div>
+        <div>
+            <h2>PHY EDU CONNECT</h2>
+            <small>ADMINISTRATION</small>
+        </div>
+    </div>
+
+    <div class="nav-label">ADMIN MENU</div>
+
+    <button class="nav-item active" data-page="overview">
+        <span class="nav-icon">⌂</span> Overview
+    </button>
+
+    <button class="nav-item" data-page="announcements">
+        <span class="nav-icon">♧</span> Announcements
+    </button>
+
+    <button class="nav-item" data-page="students">
+        <span class="nav-icon">♙</span> Students
+    </button>
+
+    <button class="nav-item" data-page="courses">
+        <span class="nav-icon">▤</span> Courses
+    </button>
+
+    <button class="nav-item" data-page="gallery">
+        <span class="nav-icon">▧</span> Gallery
+    </button>
+
+    <button class="nav-item" data-page="settings">
+        <span class="nav-icon">⚙</span> Settings
+    </button>
+
+    <div class="sidebar-bottom">
+        <p>PHY EDU CONNECT</p>
+        <p>Department Administration</p>
+        <p>Version 1.0</p>
+    </div>
+
+</aside>
+
+
+<!-- MAIN AREA -->
+
+<div class="main">
+
+    <!-- TOPBAR -->
+
+    <header class="topbar">
+
+        <div>
+            <div class="page-title" id="pageTitle">
+                Admin Overview
+            </div>
+            <div class="page-subtitle">
+                PHY EDU CONNECT Administration
+            </div>
+        </div>
+
+        <div class="top-right">
+
+            <span class="admin-badge">ADMINISTRATOR</span>
+
+            <div class="profile-summary">
+                <div class="avatar" id="adminAvatar">A</div>
+                <div class="profile-name" id="adminName">Administrator</div>
+            </div>
+
+            <button class="logout-button" id="logoutBtn" type="button">
+                Logout
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <main class="content">
+
+        <!-- OVERVIEW -->
+
+        <section class="view active" id="overview">
+
+            <div class="welcome">
+                <div class="welcome-decoration">⚛</div>
+
+                <small>DEPARTMENT ADMINISTRATION</small>
+
+                <h1>Welcome to your Admin Dashboard.</h1>
+
+                <p id="adminEmail">
+                    Verifying administrator...
+                </p>
+            </div>
+
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+                    <div class="stat-icon">📢</div>
+                    <div>
+                        <p>Announcements</p>
+                        <h2 id="announcementCount">—</h2>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">🎓</div>
+                    <div>
+                        <p>Registered Students</p>
+                        <h2 id="studentCount">Coming Soon</h2>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">📚</div>
+                    <div>
+                        <p>Available Courses</p>
+                        <h2 id="courseCount">Coming Soon</h2>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="two-grid">
+
+                <div class="panel">
+                    <div class="panel-title">Recent Announcements</div>
+
+                    <div id="overviewAnnouncements">
+                        <div class="empty">
+                            Your latest announcements will appear here.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-title">Quick Administration</div>
+
+                    <button class="more-link" data-page="announcements">
+                        <span>📢</span>
+                        <span>
+                            <strong>Publish an Update</strong>
+                            <small>Create a new department announcement</small>
+                        </span>
+                    </button>
+
+                    <button class="more-link" data-page="students">
+                        <span>🎓</span>
+                        <span>
+                            <strong>Student Directory</strong>
+                            <small>View registered student accounts</small>
+                        </span>
+                    </button>
+
+                    <button class="more-link" data-page="settings">
+                        <span>⚙</span>
+                        <span>
+                            <strong>Administration Settings</strong>
+                            <small>Manage your admin preferences</small>
+                        </span>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ANNOUNCEMENTS -->
+
+        <section class="view" id="announcements">
+
+            <div class="page-heading">
+                <h1>Department Announcements</h1>
+                <p>Create, publish and manage departmental updates.</p>
+            </div>
+
+            <div class="panel">
+
+                <div class="panel-title">Publish Department Update</div>
+
+                <form id="announcementForm">
+
+                    <label for="announcementTitle">
+                        Announcement Title
+                    </label>
+
+                    <input
+                        type="text"
+                        id="announcementTitle"
+                        placeholder="Enter announcement title"
+                        maxlength="120"
+                        required
+                    >
+
+                    <label for="announcementCategory">
+                        Category
+                    </label>
+
+                    <select id="announcementCategory" required>
+                        <option value="">Select category</option>
+                        <option value="General">General</option>
+                        <option value="Academic">Academic</option>
+                        <option value="Examination">Examination</option>
+                        <option value="Notice">Notice</option>
+                        <option value="Event">Event</option>
+                        <option value="Important">Important</option>
+                    </select>
+
+                    <label for="announcementMessage">
+                        Announcement Message
+                    </label>
+
+                    <textarea
+                        id="announcementMessage"
+                        placeholder="Write your announcement here..."
+                        maxlength="5000"
+                        required
+                    ></textarea>
+
+                    <button
+                        type="submit"
+                        class="publish"
+                        id="publishBtn"
+                    >
+                        Publish Announcement
+                    </button>
+
+                    <p class="message" id="formMessage"></p>
+
+                </form>
+
+            </div>
+
+
+            <div class="panel">
+
+                <div class="panel-title">Published Announcements</div>
+
+                <div id="announcementList">
+                    <p class="empty">Loading announcements...</p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- STUDENTS -->
+
+        <section class="view" id="students">
+
+            <div class="page-heading">
+                <h1>Student Management</h1>
+                <p>Manage and view registered PHY EDU CONNECT students.</p>
+            </div>
+
+            <div class="panel">
+                <div class="panel-title">Student Directory</div>
+
+                <div class="empty">
+                    <div style="font-size:30px;margin-bottom:10px;">🎓</div>
+                    Student management is being prepared.
+                    <br>
+                    <span class="coming-badge">COMING SOON</span>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- COURSES -->
+
+        <section class="view" id="courses">
+
+            <div class="page-heading">
+                <h1>Course Management</h1>
+                <p>Organise the academic course directory.</p>
+            </div>
+
+            <div class="feature-grid">
+
+                <div class="feature-card">
+                    <div class="feature-icon">⚛</div>
+                    <h3>Physics Courses</h3>
+                    <p>Manage Physics course information.</p>
+                    <span class="coming-badge">COMING SOON</span>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📖</div>
+                    <h3>Education Courses</h3>
+                    <p>Manage Education course information.</p>
+                    <span class="coming-badge">COMING SOON</span>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📝</div>
+                    <h3>General Studies</h3>
+                    <p>Manage general studies information.</p>
+                    <span class="coming-badge">COMING SOON</span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- GALLERY -->
+
+        <section class="view" id="gallery">
+
+            <div class="page-heading">
+                <h1>Department Gallery</h1>
+                <p>Manage departmental pictures and memories.</p>
+            </div>
+
+            <div class="panel">
+                <div class="panel-title">Gallery Management</div>
+
+                <div class="empty">
+                    <div style="font-size:30px;margin-bottom:10px;">📸</div>
+                    Gallery management is being prepared.
+                    <br>
+                    <span class="coming-badge">COMING SOON</span>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- SETTINGS -->
+
+        <section class="view" id="settings">
+
+            <div class="page-heading">
+                <h1>Administration Settings</h1>
+                <p>Manage your administrator account and platform preferences.</p>
+            </div>
+
+            <div class="panel">
+                <div class="panel-title">Administrator Account</div>
+
+                <p style="font-size:12px;color:var(--muted);line-height:1.8;">
+                    Signed-in administrator:
+                </p>
+
+                <p id="settingsAdminEmail"
+                   style="font-size:13px;font-weight:700;color:var(--navy);margin-top:5px;">
+                    Loading...
+                </p>
+            </div>
+
+            <div class="panel">
+                <div class="panel-title">Platform Information</div>
+
+                <p style="font-size:12px;color:var(--muted);line-height:1.9;">
+                    Platform: PHY EDU CONNECT<br>
+                    Version: 1.0<br>
+                    Access: Administrator
+                </p>
+            </div>
+
+        </section>
+
+
+        <!-- MORE: MOBILE LINKS -->
+
+        <section class="view" id="more">
+
+            <div class="page-heading">
+                <h1>More Administration</h1>
+                <p>Access additional management sections.</p>
+            </div>
+
+            <button class="more-link" data-page="courses">
+                <span>📚</span>
+                <span>
+                    <strong>Course Management</strong>
+                    <small>Manage the course directory</small>
+                </span>
+            </button>
+
+            <button class="more-link" data-page="gallery">
+                <span>📸</span>
+                <span>
+                    <strong>Department Gallery</strong>
+                    <small>Manage departmental pictures</small>
+                </span>
+            </button>
+
+            <button class="more-link" data-page="settings">
+                <span>⚙</span>
+                <span>
+                    <strong>Settings</strong>
+                    <small>Administrator account and platform information</small>
+                </span>
+            </button>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+        © 2026 PHY EDU CONNECT.
+        Department Administration.
+        <br><br>
+        An independent student-created platform.
+    </footer>
+
+</div>
+
+</div>
+
+
+<!-- MOBILE BOTTOM NAVIGATION -->
+
+<nav class="bottom-nav">
+
+    <button class="active" data-page="overview">
+        <span>⌂</span>
+        Overview
+    </button>
+
+    <button data-page="announcements">
+        <span>♧</span>
+        Updates
+    </button>
+
+    <button data-page="students">
+        <span>♙</span>
+        Students
+    </button>
+
+    <button data-page="more">
+        <span>☰</span>
+        More
+    </button>
+
+</nav>
+
+
+<!-- PAGE NAVIGATION -->
+
+<script>
+const pageTitles = {
+    overview: "Admin Overview",
+    announcements: "Department Announcements",
+    students: "Student Management",
+    courses: "Course Management",
+    gallery: "Department Gallery",
+    settings: "Administration Settings",
+    more: "More Administration"
+};
+
+function showAdminPage(page) {
+
+    const selectedPage = document.getElementById(page);
+
+    if (!selectedPage) return;
+
+    document.querySelectorAll(".view").forEach(view => {
+        view.classList.remove("active");
+    });
+
+    selectedPage.classList.add("active");
+
+    document.getElementById("pageTitle").textContent =
+        pageTitles[page] || "Admin Dashboard";
+
+    document.querySelectorAll("[data-page]").forEach(button => {
+        button.classList.toggle(
+            "active",
+            button.dataset.page === page
+        );
+    });
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+document.querySelectorAll("[data-page]").forEach(button => {
+    button.addEventListener("click", () => {
+        showAdminPage(button.dataset.page);
+    });
+});
+</script>
+
+
+<!-- FIREBASE ADMIN FUNCTIONALITY -->
+
+<script type="module" src="admin.js"></script>
+
+</body>
+</html>

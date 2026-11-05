@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b172a">
+    <title>Login | Phy Edu Connect.</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background:
+                radial-gradient(circle at top left, #285a91, transparent 45%),
+                radial-gradient(circle at bottom right, #174d72, transparent 45%),
+                linear-gradient(135deg, #071426, #102b46);
+            color: white;
+        }
+        .login-container {
+            width: 100%;
+            max-width: 420px;
+            padding: 40px 30px;
+            border: 1px solid rgba(255,255,255,.2);
+            border-radius: 24px;
+            background: rgba(255,255,255,.09);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 15px 45px rgba(0,0,0,.3);
+        }
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .login-header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        .login-header p {
+            color: rgba(255,255,255,.65);
+            font-size: 14px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 9px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        input, select {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid rgba(255,255,255,.2);
+            border-radius: 12px;
+            outline: none;
+            background: rgba(255,255,255,.08);
+            color: white;
+            font-size: 15px;
+        }
+        input::placeholder {
+            color: rgba(255,255,255,.5);
+        }
+        input:focus, select:focus {
+            border-color: #69b7ff;
+            box-shadow: 0 0 12px rgba(105,183,255,.2);
+        }
+        select option {
+            background: #142b43;
+            color: white;
+        }
+        .login-button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 8px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #64b5ff, #2679c9);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .login-button:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+        .message {
+            display: none;
+            margin: 15px 0;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        .message.show {
+            display: block;
+        }
+        .message.error {
+            color: #ffd2d2;
+            background: rgba(200,40,40,.18);
+            border: 1px solid rgba(255,100,100,.3);
+        }
+        .message.success {
+            color: #c9ffdf;
+            background: rgba(30,160,90,.18);
+            border: 1px solid rgba(100,255,160,.3);
+        }
+        .index-link {
+            margin-top: 24px;
+            text-align: center;
+            font-size: 14px;
+            color: rgba(255,255,255,.7);
+        }
+        .index-link a {
+            color: #75c1ff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: rgba(255,255,255,.45);
+        }
+        @media (max-width: 380px) {
+            .login-container {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="login-container">
+        <header class="login-header">
+            <h1>Welcome Back</h1>
+            <p>Log in to your Phy Edu Connect.</p>
+        </header>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    autocomplete="email"
+                    required
+                >
+            </div>
+<div class="form-group">
+                <label for="password">Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    autocomplete="current-password"
+                    required
+                >
+            </div>
+            <div id="loginMessage" class="message" role="alert"></div>
+            <button type="submit" class="login-button" id="loginButton">Log In</button>
+            <p class="index-link"><a href="#" id="forgotPasswordLink">Forgot password?</a></p>
+        </form>
+        <p class="index-link">
+            Don't have an account?
+            <a href="signup.html">Sign Up</a>
+        </p>
+        <footer>
+            &copy; 2026 Phy Edu Connect. <br> Designed & Developed by Believe Lloyd.
+        </footer>
+    </main>
+    <script type="module" src="login.js"></script>
+</body>
+</html>

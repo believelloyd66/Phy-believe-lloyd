@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#102a43">
+    <meta name="description" content="PHY EDU CONNECT - Your Physics Education student community.">
+    <title>PHY EDU CONNECT | Student Community</title>
+    <style>
+        :root {
+            --primary: #102a43;
+            --secondary: #1d5d91;
+            --accent: #58a6df;
+            --light: #f3f7fb;
+            --white: #ffffff;
+            --text: #263746;
+            --muted: #758597;
+            --border: #e5ebf1;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont,
+                         "Segoe UI", sans-serif;
+            background: var(--light);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        button {
+            font: inherit;
+            cursor: pointer;
+        }
+        /* HEADER */
+        header {
+            background: var(--primary);
+            color: var(--white);
+            padding: 16px 6%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo {
+            font-size: 19px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+        .logo span {
+            color: var(--accent);
+        }
+        nav {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+        nav a {
+            font-size: 13px;
+            color: #d9e6f2;
+            transition: .3s;
+        }
+        nav a:hover {
+            color: var(--accent);
+        }
+        .menu-btn {
+            display: none;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 25px;
+        }
+        /* HERO */
+        .hero {
+            background:
+                radial-gradient(circle at top right,
+                #316c9d 0%, transparent 40%),
+                linear-gradient(135deg, #102a43, #174a73);
+            color: white;
+            padding: 85px 7%;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+        }
+        .hero-content {
+            max-width: 700px;
+        }
+        .tag {
+            display: inline-block;
+            padding: 6px 13px;
+            border: 1px solid #ffffff45;
+            border-radius: 30px;
+            color: #c8e5ff;
+            font-size: 11px;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+        .hero h1 {
+            font-size: clamp(35px, 6vw, 57px);
+            line-height: 1.15;
+            margin-bottom: 18px;
+        }
+        .hero h1 span {
+            color: #78c2fa;
+        }
+        .hero p {
+            color: #d3e2ef;
+            max-width: 520px;
+            font-size: 15px;
+            margin-bottom: 28px;
+        }
+        .hero-btn {
+            display: inline-block;
+            background: white;
+            color: var(--primary);
+            padding: 12px 23px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 13px;
+            transition: .3s;
+        }
+        .hero-btn:hover {
+            background: #cce8ff;
+            transform: translateY(-2px);
+        }
+        /* GENERAL SECTIONS */
+        section {
+            padding: 55px 7%;
+        }
+        .section-heading {
+            margin-bottom: 25px;
+        }
+        .section-heading h2 {
+            font-size: 25px;
+            color: var(--primary);
+        }
+        .section-heading p {
+            color: var(--muted);
+            font-size: 13px;
+            margin-top: 5px;
+        }
+        /* WELCOME CARD */
+        .welcome-card {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            box-shadow: 0 5px 20px #102a4308;
+        }
+        .welcome-card h3 {
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+        .welcome-card p {
+            font-size: 14px;
+            color: var(--muted);
+        }
+        /* QUICK LINKS */
+        .quick-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+        .quick-card {
+            background: white;
+            padding: 22px 15px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: .3s;
+        }
+        .quick-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+            box-shadow: 0 8px 20px #102a4310;
+        }
+        .quick-icon {
+            font-size: 27px;
+            margin-bottom: 12px;
+        }
+        .quick-card h3 {
+            color: var(--primary);
+            font-size: 14px;
+        }
+        .quick-card p {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+        /* ANNOUNCEMENTS */
+        .announcement {
+            background: white;
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--accent);
+            padding: 18px;
+            border-radius: 9px;
+            margin-bottom: 12px;
+        }
+        .announcement h3 {
+            color: var(--primary);
+            font-size: 15px;
+        }
+        .announcement p {
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: 5px;
+        }
+        .announcement small {
+            color: var(--secondary);
+            font-size: 11px;
+        }
+        /* COMING SOON */
+        .coming-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+        }
+        .coming-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 18px;
+            position: relative;
+            opacity: .85;
+        }
+        .coming-card .icon {
+            font-size: 25px;
+            margin-bottom: 10px;
+        }
+        .coming-card h3 {
+            color: var(--primary);
+            font-size: 13px;
+        }
+        .coming-card p {
+            color: var(--muted);
+            font-size: 11px;
+            margin-top: 5px;
+        }
+        .coming-label {
+            display: inline-block;
+            background: #eaf4fc;
+            color: #27679a;
+            font-size: 9px;
+            font-weight: 800;
+            padding: 4px 8px;
+            border-radius: 20px;
+            margin-top: 12px;
+        }
+        /* FOOTER */
+        footer {
+            background: var(--primary);
+            color: white;
+            padding: 35px 7%;
+            text-align: center;
+        }
+        footer h3 {
+            font-size: 19px;
+            letter-spacing: 1px;
+        }
+        footer p {
+            color: #bdccda;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+        .footer-credit {
+            margin-top: 20px;
+            padding-top: 18px;
+            border-top: 1px solid #ffffff20;
+            font-size: 11px;
+        }
+        /* MOBILE */
+        @media (max-width: 700px) {
+            header {
+                padding: 15px 5%;
+            }
+            .menu-btn {
+                display: block;
+            }
+            nav {
+                display: none;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background: var(--primary);
+                flex-direction: column;
+                padding: 20px;
+                gap: 18px;
+                align-items: flex-start;
+            }
+            nav.active {
+                display: flex;
+            }
+            .hero {
+                padding: 65px 6%;
+                min-height: 360px;
+            }
+            section {
+                padding: 42px 6%;
+            }
+            .quick-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .coming-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .section-heading h2 {
+                font-size: 22px;
+            }
+        }
+        @media (max-width: 360px) {
+            .logo {
+                font-size: 16px;
+            }
+        }
+		#ok{
+			font-size: 13px;
+			
+			
+		}
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <a href="#home" class="logo">
+            PHY EDU <span>CONNECT</span>
+        </a>
+
+		<div id="ok">
+		<a href="login.html" style="margin: 10px;">Login</a>
+		<a href="signup.html">Signup</a>
+		</div>
+		
+        <button class="menu-btn"
+                id="menuBtn"
+                aria-label="Open navigation"
+                aria-expanded="false">
+            ☰
+        </button>
+        <nav id="navigation">
+            <a href="#home">Home</a>
+            <a href="#updates">Updates</a>
+            <a href="#courses">Courses</a>
+            <a href="#gallery">Gallery</a>
+            <a href="#coming">Coming Soon</a>
+        </nav>
+    </header>
+    <!-- HERO -->
+    <main>
+        <section class="hero" id="home">
+            <div class="hero-content">
+                <span class="tag">
+                    THE PHYSICS EDUCATION COMMUNITY
+                </span>
+                <h1>
+                    Your Department.<br>
+                    Your People.<br>
+                    <span>Your Space.</span>
+                </h1>
+                <p>
+                    A shared space for students of Physics Education
+                    to stay informed, connect, learn and create
+                    memorable experiences together.
+                </p>
+                <a href="#explore" class="hero-btn">
+                    Explore PHY EDU →
+                </a>
+            </div>
+        </section>
+        <!-- WELCOME -->
+        <section>
+            <div class="welcome-card">
+                <h3>Welcome to PHY EDU CONNECT!</h3>
+                <p>
+                    We're glad you're here. This platform was
+                    created to bring our departmental community
+                    closer together by making important academic
+                    information and student updates easier to access.
+                    Built for students, by Believe Lloyd Kemjika.
+                </p>
+            </div>
+        </section>
+        <!-- QUICK ACCESS -->
+        <section id="explore">
+            <div class="section-heading">
+                <h2>Explore Your Department</h2>
+                <p>
+                    Everything you need, all in one place.
+                </p>
+            </div>
+            <div class="quick-grid">
+                <a href="#updates" class="quick-card">
+                    <div class="quick-icon">📢</div>
+                    <h3>Announcements</h3>
+                    <p>Stay updated with the latest information.</p>
+                </a>
+                <a href="#timetable" class="quick-card">
+                    <div class="quick-icon">📅</div>
+                    <h3>Timetable</h3>
+                    <p>Check your lecture schedules.</p>
+                </a>
+                <a href="#courses" class="quick-card">
+                    <div class="quick-icon">📚</div>
+                    <h3>Courses</h3>
+                    <p>Explore departmental courses.</p>
+                </a>
+                <a href="#gallery" class="quick-card">
+                    <div class="quick-icon">📸</div>
+                    <h3>Gallery</h3>
+                    <p>Explore our departmental memories.</p>
+                </a>
+            </div>
+        </section>
+        <!-- ANNOUNCEMENTS -->
+        <section id="updates">
+            <div class="section-heading">
+                <h2>Department Updates</h2>
+                <p>
+                    Important information and recent announcements.
+                </p>
+            </div>
+            <div class="announcement">
+                <small>WELCOME</small>
+                <h3>Welcome to PHY EDU CONNECT</h3>
+                <p>
+                    Our departmental student community platform
+                    is here. Stay connected for academic information
+                    and future updates.
+                </p>
+            </div>
+            <div class="announcement">
+                <small>PLATFORM UPDATE</small>
+                <h3>More Features Coming Soon</h3>
+                <p>
+                    We're working on introducing more features
+                    to make your experience better.
+                </p>
+            </div>
+        </section>
+        <!-- TIMETABLE -->
+        <section id="timetable">
+            <div class="section-heading">
+                <h2>Lecture Timetable</h2>
+                <p>
+                    Your academic schedule will be available here.
+                </p>
+            </div>
+            <div class="welcome-card">
+                <h3>Timetable updates</h3>
+                <p>
+                    The departmental lecture timetable will be
+                    published here when verified information
+                    is available.
+                </p>
+            </div>
+        </section>
+        <!-- COURSES -->
+        <section id="courses">
+            <div class="section-heading">
+                <h2>Courses & Learning</h2>
+                <p>
+                    Your academic journey starts here.
+                </p>
+            </div>
+            <div class="welcome-card">
+                <h3>Explore Your Courses</h3>
+                <p>
+                    Course information, available learning
+                    materials and useful academic resources
+                    will be organised here.
+                </p>
+            </div>
+        </section>
+        <!-- GALLERY -->
+        <section id="gallery">
+            <div class="section-heading">
+                <h2>Department Memories</h2>
+                <p>
+                    Every moment tells a story.
+                </p>
+            </div>
+            <div class="welcome-card">
+                <h3>Our Community, Our Memories</h3>
+                <p>
+                    Departmental activities, student experiences
+                    and memorable moments will be featured here.
+                </p>
+            </div>
+        </section>
+        <!-- COMING SOON -->
+        <section id="coming">
+            <div class="section-heading">
+                <h2>More Is Coming</h2>
+                <p>
+                    We're just getting started. Look forward
+                    to more exciting features.
+                </p>
+            </div>
+            <div class="coming-grid">
+                <div class="coming-card">
+                    <div class="icon">🎂</div>
+                    <h3>Birthday Corner</h3>
+                    <p>Celebrate our members.</p>
+                    <span class="coming-label">COMING SOON</span>
+                </div>
+                <div class="coming-card">
+                    <div class="icon">🗳️</div>
+                    <h3>Student Polls</h3>
+                    <p>Share your opinions.</p>
+                    <span class="coming-label">COMING SOON</span>
+                </div>
+                <div class="coming-card">
+                    <div class="icon">🧠</div>
+                    <h3>Brain Challenge</h3>
+                    <p>Test your knowledge.</p>
+                    <span class="coming-label">COMING SOON</span>
+                </div>
+                <div class="coming-card">
+                    <div class="icon">💬</div>
+                    <h3>Suggestion Box</h3>
+                    <p>Let your voice be heard.</p>
+                    <span class="coming-label">COMING SOON</span>
+                </div>
+                <div class="coming-card">
+                    <div class="icon">👥</div>
+                    <h3>Study Partners</h3>
+                    <p>Find your study community.</p>
+                    <span class="coming-label">COMING SOON</span>
+                </div>
+                <div class="coming-card">
+                    <div class="icon">🔎</div>
+                    <h3>Lost & Found</h3>
+                    <p>Help reunite lost items.</p>
+                    <span class="coming-label">COMING SOON</span>
+                </div>
+                <div class="coming-card">
+                    <div class="icon">📆</div>
+                    <h3>Academic Calendar</h3>
+                    <p>Keep track of important dates.</p>
+                    <span class="coming-label">COMING SOON</span>
+                </div>
+                <div class="coming-card">
+                    <div class="icon">🏆</div>
+                    <h3>Student Recognition</h3>
+                    <p>Celebrate achievements.</p>
+                    <span class="coming-label">COMING SOON</span>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- FOOTER -->
+    <footer>
+        <h3>PHY EDU CONNECT</h3>
+        <p>
+            A department. A community. A shared space.
+        </p>
+        <p>
+            An independent student-created platform.
+            Not an official university website.
+        </p>
+        <div class="footer-credit">
+            © 2026 PHY EDU CONNECT.<br>
+            Designed & Developed by Believe Lloyd.
+            <p>Version 1.0</p>
+        </div>
+    </footer>
+    <!-- JAVASCRIPT -->
+    <script>
+        const menuBtn = document.getElementById("menuBtn");
+        const navigation = document.getElementById("navigation");
+        menuBtn.addEventListener("click", function () {
+            navigation.classList.toggle("active");
+            const isOpen = navigation.classList.contains("active");
+            menuBtn.setAttribute("aria-expanded", isOpen);
+            menuBtn.innerHTML = isOpen ? "✕" : "☰";
+        });
+        // Close menu after selecting a link
+        document.querySelectorAll("#navigation a").forEach(link => {
+            link.addEventListener("click", function () {
+                navigation.classList.remove("active");
+                menuBtn.setAttribute("aria-expanded", "false");
+                menuBtn.innerHTML = "☰";
+            });
+        });
+    </script>
+</body>
+</html>
