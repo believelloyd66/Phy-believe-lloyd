@@ -495,6 +495,65 @@ textarea {
     border-radius: 8px;
 }
 
+/* STUDENT DIRECTORY */
+
+.student-summary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.student-total-label {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.student-total {
+    font-size: 25px;
+    color: var(--navy);
+    margin-top: 5px;
+}
+
+.student-search {
+    margin-top: 8px;
+}
+
+.student-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.student-table {
+    width: 100%;
+    min-width: 650px;
+    border-collapse: collapse;
+}
+
+.student-table th,
+.student-table td {
+    padding: 13px 12px;
+    text-align: left;
+    font-size: 12px;
+    border-bottom: 1px solid var(--border);
+}
+
+.student-table th {
+    color: var(--navy);
+    background: var(--light-blue);
+    font-weight: 750;
+}
+
+.student-table td {
+    color: var(--text);
+}
+
+.student-table tr:hover td {
+    background: #FAFCFF;
+}
+
 /* COMING SOON */
 
 .feature-grid {
@@ -799,12 +858,9 @@ footer {
 
 </aside>
 
-
 <!-- MAIN AREA -->
 
 <div class="main">
-
-    <!-- TOPBAR -->
 
     <header class="topbar">
 
@@ -834,7 +890,6 @@ footer {
 
     </header>
 
-
     <main class="content">
 
         <!-- OVERVIEW -->
@@ -853,7 +908,6 @@ footer {
                 </p>
             </div>
 
-
             <div class="stats-grid">
 
                 <div class="stat-card">
@@ -868,7 +922,7 @@ footer {
                     <div class="stat-icon">🎓</div>
                     <div>
                         <p>Registered Students</p>
-                        <h2 id="studentCount">Coming Soon</h2>
+                        <h2 id="studentCount">—</h2>
                     </div>
                 </div>
 
@@ -881,7 +935,6 @@ footer {
                 </div>
 
             </div>
-
 
             <div class="two-grid">
 
@@ -927,7 +980,6 @@ footer {
             </div>
 
         </section>
-
 
         <!-- ANNOUNCEMENTS -->
 
@@ -995,7 +1047,6 @@ footer {
 
             </div>
 
-
             <div class="panel">
 
                 <div class="panel-title">Published Announcements</div>
@@ -1008,7 +1059,6 @@ footer {
 
         </section>
 
-
         <!-- STUDENTS -->
 
         <section class="view" id="students">
@@ -1019,18 +1069,48 @@ footer {
             </div>
 
             <div class="panel">
+
                 <div class="panel-title">Student Directory</div>
 
-                <div class="empty">
-                    <div style="font-size:30px;margin-bottom:10px;">🎓</div>
-                    Student management is being prepared.
-                    <br>
-                    <span class="coming-badge">COMING SOON</span>
+                <div class="student-summary">
+
+                    <div>
+                        <p class="student-total-label">
+                            Total registered students
+                        </p>
+
+                        <h2 id="studentDirectoryCount"
+                            class="student-total">
+                            —
+                        </h2>
+                    </div>
+
+                    <span class="coming-badge">LIVE DIRECTORY</span>
+
                 </div>
+
+                <label for="studentSearch">
+                    Search Students
+                </label>
+
+                <input
+                    type="search"
+                    id="studentSearch"
+                    class="student-search"
+                    placeholder="Search name, matric number or email..."
+                >
+
+                <div id="studentList">
+                    <div class="empty">
+                        Loading registered students...
+                    </div>
+                </div>
+
+                <p class="message" id="studentMessage"></p>
+
             </div>
 
         </section>
-
 
         <!-- COURSES -->
 
@@ -1068,7 +1148,6 @@ footer {
 
         </section>
 
-
         <!-- GALLERY -->
 
         <section class="view" id="gallery">
@@ -1090,7 +1169,6 @@ footer {
             </div>
 
         </section>
-
 
         <!-- SETTINGS -->
 
@@ -1125,7 +1203,6 @@ footer {
             </div>
 
         </section>
-
 
         <!-- MORE: MOBILE LINKS -->
 
@@ -1164,7 +1241,6 @@ footer {
 
     </main>
 
-
     <footer>
         © 2026 PHY EDU CONNECT.
         Department Administration.
@@ -1175,7 +1251,6 @@ footer {
 </div>
 
 </div>
-
 
 <!-- MOBILE BOTTOM NAVIGATION -->
 
@@ -1202,7 +1277,6 @@ footer {
     </button>
 
 </nav>
-
 
 <!-- PAGE NAVIGATION -->
 
@@ -1251,7 +1325,6 @@ document.querySelectorAll("[data-page]").forEach(button => {
     });
 });
 </script>
-
 
 <!-- FIREBASE ADMIN FUNCTIONALITY -->
 
