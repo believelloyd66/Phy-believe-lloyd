@@ -7,10 +7,11 @@ import {
 } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js";
 
 import {
+    doc,
+    getDoc,
     collection,
     addDoc,
     deleteDoc,
-    doc,
     query,
     orderBy,
     onSnapshot,
@@ -19,14 +20,7 @@ import {
 
 
 // ======================================
-// 1. ADMIN CONFIGURATION
-// ======================================
-
-const ADMIN_EMAIL = "lloydbelieve66@gmail.com";
-
-
-// ======================================
-// 2. GET HTML ELEMENTS
+// 1. GET HTML ELEMENTS
 // ======================================
 
 const adminEmail = document.getElementById("adminEmail");
@@ -49,16 +43,29 @@ const overviewAnnouncements = document.getElementById("overviewAnnouncements");
 const announcementCount = document.getElementById("announcementCount");
 
 
+// STUDENT ELEMENTS
+
+const studentCount = document.getElementById("studentCount");
+const studentDirectoryCount = document.getElementById("studentDirectoryCount");
+const studentSearch = document.getElementById("studentSearch");
+const studentList = document.getElementById("studentList");
+const studentMessage = document.getElementById("studentMessage");
+
+
 // ======================================
-// 3. ADMIN VARIABLES
+// 2. ADMIN VARIABLES
 // ======================================
 
 let currentAdmin = null;
+
 let stopAnnouncements = null;
+let stopStudents = null;
+
+let allStudents = [];
 
 
 // ======================================
-// 4. FORMAT ANNOUNCEMENT DATE
+// 3. FORMAT DATES
 // ======================================
 
 function formatDate(timestamp) {
@@ -72,8 +79,19 @@ function formatDate(timestamp) {
 }
 
 
+function formatStudentDate(timestamp) {
+
+    if (!timestamp || typeof timestamp.toDate !== "function") {
+        return "Date unavailable";
+    }
+
+    return timestamp.toDate().toLocaleDateString();
+
+}
+
+
 // ======================================
-// 5. CREATE ANNOUNCEMENT CARD
+// 4. CREATE ANNOUNCEMENT CARD
 // ======================================
 
 function createAnnouncementCard(data, documentId, allowDelete = false) {
@@ -150,7 +168,7 @@ function createAnnouncementCard(data, documentId, allowDelete = false) {
 
 
 // ======================================
-// 6. CHECK ADMINISTRATOR LOGIN
+// 5. CHECK ADMINISTRATOR LOGIN
 // ======================================
 
 onAuthStateChanged(auth, async (user) => {
@@ -162,52 +180,66 @@ onAuthStateChanged(auth, async (user) => {
 
     }
 
-    // CHECK ADMIN EMAIL
+    try {
 
-    if (user.email?.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+        const adminRef = doc(db, "admins", user.uid);
 
-        alert("Access denied. Administrator permission required.");
+        const adminSnap = await getDoc(adminRef);
 
-        window.location.replace("dashboard.html");
-        return;
+        if (!adminSnap.exists() || adminSnap.data().role !== "admin") {
+
+            alert("Access denied. Administrator permission required.");
+
+            window.location.replace("dashboard.html");
+            return;
+
+        }
+
+        currentAdmin = user;
+
+
+        // ADMIN PROFILE
+
+        const email = user.email || "Administrator";
+
+        const name = user.displayName || email.split("@")[0];
+
+        adminEmail.textContent = "Logged in as: " + email;
+
+        adminName.textContent = name;
+
+        adminAvatar.textContent = name.charAt(0).toUpperCase();
+
+        settingsAdminEmail.textContent = email;
+
+
+        // LOAD ADMIN DATA
+
+        loadAnnouncements();
+
+        loadStudents();
+
+    } catch (error) {
+
+        console.error("Admin verification error:", error);
+
+        adminEmail.textContent =
+            "Unable to verify administrator access. Check your connection and refresh.";
 
     }
-
-    currentAdmin = user;
-
-
-    // ADMIN PROFILE
-
-    const email = user.email || "Administrator";
-
-    const name = user.displayName || email.split("@")[0];
-
-    adminEmail.textContent = "Logged in as: " + email;
-
-    adminName.textContent = name;
-
-    adminAvatar.textContent = name.charAt(0).toUpperCase();
-
-    settingsAdminEmail.textContent = email;
-
-
-    // LOAD ANNOUNCEMENTS
-
-    loadAnnouncements();
 
 });
 
 
 // ======================================
-// 7. PUBLISH ANNOUNCEMENT
+// 6. PUBLISH ANNOUNCEMENT
 // ======================================
 
 announcementForm.addEventListener("submit", async (event) => {
 
     event.preventDefault();
 
-    if (!currentAdmin ||
-        currentAdmin.email?.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+    if (!currentAdmin) {
 
         formMessage.textContent =
             "Administrator verification is incomplete.";
@@ -291,7 +323,7 @@ announcementForm.addEventListener("submit", async (event) => {
 
 
 // ======================================
-// 8. LOAD ANNOUNCEMENTS IN REAL TIME
+// 7. LOAD ANNOUNCEMENTS IN REAL TIME
 // ======================================
 
 function loadAnnouncements() {
@@ -347,8 +379,6 @@ function loadAnnouncements() {
                 const documentId = documentSnapshot.id;
 
 
-                // FULL ANNOUNCEMENT LIST
-
                 const fullCard = createAnnouncementCard(
                     data,
                     documentId,
@@ -357,8 +387,6 @@ function loadAnnouncements() {
 
                 announcementList.appendChild(fullCard);
 
-
-                // THREE LATEST ANNOUNCEMENTS
 
                 if (recentNumber < 3) {
 
@@ -397,7 +425,259 @@ function loadAnnouncements() {
 
 
 // ======================================
-// 9. LOGOUT
+// 8. LOAD REGISTERED STUDENTS
+// ======================================
+
+function loadStudents() {
+
+    if (stopStudents) {
+
+        stopStudents();
+
+    }
+
+    studentList.innerHTML =
+        '<p class="empty">Loading registered students...</p>';
+
+    const usersRef = collection(db, "users");
+
+
+    stopStudents = onSnapshot(
+
+        usersRef,
+
+        (snapshot) => {
+
+            // GET STUDENT RECORDS
+
+            allStudents = snapshot.docs.map(documentSnapshot => ({
+                id: documentSnapshot.id,
+                ...documentSnapshot.data()
+            }));
+
+
+            // SORT NEWEST FIRST
+
+            allStudents.sort((a, b) => {
+
+                const dateA = a.createdAt?.toMillis?.() || 0;
+
+                const dateB = b.createdAt?.toMillis?.() || 0;
+
+                return dateB - dateA;
+
+            });
+
+
+            // UPDATE BOTH STUDENT COUNTS
+
+            studentCount.textContent = allStudents.length;
+
+            studentDirectoryCount.textContent = allStudents.length;
+
+
+            // DISPLAY STUDENTS
+
+            filterStudents();
+
+
+            studentMessage.textContent = "";
+
+        },
+
+
+        (error) => {
+
+            console.error("Student loading error:", error);
+
+            studentList.textContent =
+                "Unable to load students: " + error.message;
+
+            studentMessage.textContent =
+                "Check your Firestore permissions and internet connection.";
+
+            studentMessage.style.color = "red";
+
+        }
+
+    );
+
+}
+
+
+// ======================================
+// 9. DISPLAY STUDENTS
+// ======================================
+
+function displayStudents(students) {
+
+    studentList.replaceChildren();
+
+
+    if (students.length === 0) {
+
+        const empty = document.createElement("div");
+
+        empty.className = "empty";
+
+        empty.textContent = allStudents.length === 0
+            ? "No registered student profiles found yet."
+            : "No students match your search.";
+
+        studentList.appendChild(empty);
+
+        return;
+
+    }
+
+
+    const wrapper = document.createElement("div");
+
+    wrapper.className = "student-table-wrap";
+
+
+    const table = document.createElement("table");
+
+    table.className = "student-table";
+
+
+    // TABLE HEADER
+
+    const headers = [
+        "Full Name",
+        "Matric Number",
+        "Email",
+        "Phone",
+        "Department",
+        "Date Registered"
+    ];
+
+    const thead = document.createElement("thead");
+
+    const headerRow = document.createElement("tr");
+
+
+    headers.forEach(header => {
+
+        const th = document.createElement("th");
+
+        th.textContent = header;
+
+        headerRow.appendChild(th);
+
+    });
+
+
+    thead.appendChild(headerRow);
+
+    table.appendChild(thead);
+
+
+    // TABLE BODY
+
+    const tbody = document.createElement("tbody");
+
+
+    students.forEach(student => {
+
+        const row = document.createElement("tr");
+
+
+        const values = [
+
+            student.fullName,
+
+            student.matricNumber,
+
+            student.email,
+
+            student.phone,
+
+            student.department,
+
+            formatStudentDate(student.createdAt)
+
+        ];
+
+
+        values.forEach(value => {
+
+            const cell = document.createElement("td");
+
+            cell.textContent = value || "Not provided";
+
+            row.appendChild(cell);
+
+        });
+
+
+        tbody.appendChild(row);
+
+    });
+
+
+    table.appendChild(tbody);
+
+    wrapper.appendChild(table);
+
+    studentList.appendChild(wrapper);
+
+}
+
+
+// ======================================
+// 10. SEARCH AND FILTER STUDENTS
+// ======================================
+
+function filterStudents() {
+
+    const searchValue = studentSearch.value
+        .toLowerCase()
+        .trim();
+
+
+    const filteredStudents = allStudents.filter(student => {
+
+        const fullName = (student.fullName || "").toLowerCase();
+
+        const matricNumber = (student.matricNumber || "").toLowerCase();
+
+        const email = (student.email || "").toLowerCase();
+
+        const phone = (student.phone || "").toLowerCase();
+
+        const department = (student.department || "").toLowerCase();
+
+
+        return (
+
+            fullName.includes(searchValue) ||
+
+            matricNumber.includes(searchValue) ||
+
+            email.includes(searchValue) ||
+
+            phone.includes(searchValue) ||
+
+            department.includes(searchValue)
+
+        );
+
+    });
+
+
+    displayStudents(filteredStudents);
+
+}
+
+
+// SEARCH INPUT EVENT
+
+studentSearch.addEventListener("input", filterStudents);
+
+
+// ======================================
+// 11. LOGOUT
 // ======================================
 
 logoutBtn.addEventListener("click", async () => {
@@ -412,6 +692,12 @@ logoutBtn.addEventListener("click", async () => {
         if (stopAnnouncements) {
 
             stopAnnouncements();
+
+        }
+
+        if (stopStudents) {
+
+            stopStudents();
 
         }
 
