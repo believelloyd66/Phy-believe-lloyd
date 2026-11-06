@@ -8,7 +8,6 @@ import {
 
 import {
     doc,
-    getDoc,
     collection,
     addDoc,
     deleteDoc,
@@ -20,7 +19,14 @@ import {
 
 
 // ======================================
-// 1. GET HTML ELEMENTS
+// 1. ADMIN CONFIGURATION
+// ======================================
+
+const ADMIN_EMAIL = "lloydbelieve66@gmail.com";
+
+
+// ======================================
+// 2. GET HTML ELEMENTS
 // ======================================
 
 const adminEmail = document.getElementById("adminEmail");
@@ -53,7 +59,7 @@ const studentMessage = document.getElementById("studentMessage");
 
 
 // ======================================
-// 2. ADMIN VARIABLES
+// 3. ADMIN VARIABLES
 // ======================================
 
 let currentAdmin = null;
@@ -65,7 +71,7 @@ let allStudents = [];
 
 
 // ======================================
-// 3. FORMAT DATES
+// 4. FORMAT DATES
 // ======================================
 
 function formatDate(timestamp) {
@@ -91,7 +97,7 @@ function formatStudentDate(timestamp) {
 
 
 // ======================================
-// 4. CREATE ANNOUNCEMENT CARD
+// 5. CREATE ANNOUNCEMENT CARD
 // ======================================
 
 function createAnnouncementCard(data, documentId, allowDelete = false) {
@@ -118,8 +124,6 @@ function createAnnouncementCard(data, documentId, allowDelete = false) {
     card.appendChild(message);
     card.appendChild(date);
 
-
-    // DELETE BUTTON
 
     if (allowDelete) {
 
@@ -168,7 +172,7 @@ function createAnnouncementCard(data, documentId, allowDelete = false) {
 
 
 // ======================================
-// 5. CHECK ADMINISTRATOR LOGIN
+// 6. VERIFY ADMINISTRATOR
 // ======================================
 
 onAuthStateChanged(auth, async (user) => {
@@ -180,59 +184,52 @@ onAuthStateChanged(auth, async (user) => {
 
     }
 
-    try {
 
-        const adminRef = doc(db, "admins", user.uid);
+    // CHECK ADMIN EMAIL
 
-        const adminSnap = await getDoc(adminRef);
+    if (
+        !user.email ||
+        user.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()
+    ) {
 
-        if (!adminSnap.exists() || adminSnap.data().role !== "admin") {
+        alert("Access denied. Administrator permission required.");
 
-            alert("Access denied. Administrator permission required.");
+        window.location.replace("dashboard.html");
 
-            window.location.replace("dashboard.html");
-            return;
-
-        }
-
-        currentAdmin = user;
-
-
-        // ADMIN PROFILE
-
-        const email = user.email || "Administrator";
-
-        const name = user.displayName || email.split("@")[0];
-
-        adminEmail.textContent = "Logged in as: " + email;
-
-        adminName.textContent = name;
-
-        adminAvatar.textContent = name.charAt(0).toUpperCase();
-
-        settingsAdminEmail.textContent = email;
-
-
-        // LOAD ADMIN DATA
-
-        loadAnnouncements();
-
-        loadStudents();
-
-    } catch (error) {
-
-        console.error("Admin verification error:", error);
-
-        adminEmail.textContent =
-            "Unable to verify administrator access. Check your connection and refresh.";
+        return;
 
     }
+
+
+    currentAdmin = user;
+
+
+    // ADMIN PROFILE
+
+    const email = user.email;
+
+    const name = user.displayName || email.split("@")[0];
+
+    adminEmail.textContent = "Logged in as: " + email;
+
+    adminName.textContent = name;
+
+    adminAvatar.textContent = name.charAt(0).toUpperCase();
+
+    settingsAdminEmail.textContent = email;
+
+
+    // LOAD ADMIN DATA
+
+    loadAnnouncements();
+
+    loadStudents();
 
 });
 
 
 // ======================================
-// 6. PUBLISH ANNOUNCEMENT
+// 7. PUBLISH ANNOUNCEMENT
 // ======================================
 
 announcementForm.addEventListener("submit", async (event) => {
@@ -249,6 +246,7 @@ announcementForm.addEventListener("submit", async (event) => {
         return;
 
     }
+
 
     const title = announcementTitle.value.trim();
 
@@ -323,7 +321,7 @@ announcementForm.addEventListener("submit", async (event) => {
 
 
 // ======================================
-// 7. LOAD ANNOUNCEMENTS IN REAL TIME
+// 8. LOAD ANNOUNCEMENTS
 // ======================================
 
 function loadAnnouncements() {
@@ -358,11 +356,11 @@ function loadAnnouncements() {
 
             if (snapshot.empty) {
 
-                announcementList.innerHTML =
-                    '<p class="empty">No announcements have been published yet.</p>';
+                announcementList.textContent =
+                    "No announcements have been published yet.";
 
-                overviewAnnouncements.innerHTML =
-                    '<p class="empty">No recent announcements yet.</p>';
+                overviewAnnouncements.textContent =
+                    "No recent announcements yet.";
 
                 return;
 
@@ -406,7 +404,6 @@ function loadAnnouncements() {
 
         },
 
-
         (error) => {
 
             console.error("Announcement loading error:", error);
@@ -425,7 +422,7 @@ function loadAnnouncements() {
 
 
 // ======================================
-// 8. LOAD REGISTERED STUDENTS
+// 9. LOAD REGISTERED STUDENTS
 // ======================================
 
 function loadStudents() {
@@ -436,8 +433,9 @@ function loadStudents() {
 
     }
 
-    studentList.innerHTML =
-        '<p class="empty">Loading registered students...</p>';
+
+    studentList.textContent = "Loading registered students...";
+
 
     const usersRef = collection(db, "users");
 
@@ -448,11 +446,12 @@ function loadStudents() {
 
         (snapshot) => {
 
-            // GET STUDENT RECORDS
-
             allStudents = snapshot.docs.map(documentSnapshot => ({
+
                 id: documentSnapshot.id,
+
                 ...documentSnapshot.data()
+
             }));
 
 
@@ -469,7 +468,7 @@ function loadStudents() {
             });
 
 
-            // UPDATE BOTH STUDENT COUNTS
+            // UPDATE COUNTS
 
             studentCount.textContent = allStudents.length;
 
@@ -480,21 +479,19 @@ function loadStudents() {
 
             filterStudents();
 
-
             studentMessage.textContent = "";
 
         },
-
 
         (error) => {
 
             console.error("Student loading error:", error);
 
             studentList.textContent =
-                "Unable to load students: " + error.message;
+                "Unable to load student records: " + error.message;
 
             studentMessage.textContent =
-                "Check your Firestore permissions and internet connection.";
+                "Check your Firestore security rules and internet connection.";
 
             studentMessage.style.color = "red";
 
@@ -506,7 +503,7 @@ function loadStudents() {
 
 
 // ======================================
-// 9. DISPLAY STUDENTS
+// 10. DISPLAY STUDENTS
 // ======================================
 
 function displayStudents(students) {
@@ -541,16 +538,22 @@ function displayStudents(students) {
     table.className = "student-table";
 
 
-    // TABLE HEADER
-
     const headers = [
+
         "Full Name",
+
         "Matric Number",
+
         "Email",
+
         "Phone",
+
         "Department",
+
         "Date Registered"
+
     ];
+
 
     const thead = document.createElement("thead");
 
@@ -572,8 +575,6 @@ function displayStudents(students) {
 
     table.appendChild(thead);
 
-
-    // TABLE BODY
 
     const tbody = document.createElement("tbody");
 
@@ -626,7 +627,7 @@ function displayStudents(students) {
 
 
 // ======================================
-// 10. SEARCH AND FILTER STUDENTS
+// 11. SEARCH STUDENTS
 // ======================================
 
 function filterStudents() {
@@ -671,13 +672,11 @@ function filterStudents() {
 }
 
 
-// SEARCH INPUT EVENT
-
 studentSearch.addEventListener("input", filterStudents);
 
 
 // ======================================
-// 11. LOGOUT
+// 12. LOGOUT
 // ======================================
 
 logoutBtn.addEventListener("click", async () => {
