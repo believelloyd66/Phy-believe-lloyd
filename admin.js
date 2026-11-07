@@ -8,9 +8,11 @@ import {
 
 import {
     doc,
+    getDoc,
     collection,
     addDoc,
     deleteDoc,
+    updateDoc,
     query,
     orderBy,
     onSnapshot,
@@ -19,15 +21,10 @@ import {
 
 
 // ======================================
-// 1. ADMIN CONFIGURATION
+// 1. GET HTML ELEMENTS
 // ======================================
 
-const ADMIN_EMAIL = "lloydbelieve66@gmail.com";
-
-
-// ======================================
-// 2. GET HTML ELEMENTS
-// ======================================
+// ADMIN PROFILE
 
 const adminEmail = document.getElementById("adminEmail");
 const adminName = document.getElementById("adminName");
@@ -35,6 +32,9 @@ const adminAvatar = document.getElementById("adminAvatar");
 const settingsAdminEmail = document.getElementById("settingsAdminEmail");
 
 const logoutBtn = document.getElementById("logoutBtn");
+
+
+// ANNOUNCEMENT ELEMENTS
 
 const announcementForm = document.getElementById("announcementForm");
 const announcementTitle = document.getElementById("announcementTitle");
@@ -58,20 +58,30 @@ const studentList = document.getElementById("studentList");
 const studentMessage = document.getElementById("studentMessage");
 
 
+// SUGGESTION ELEMENTS
+
+const suggestionCount = document.getElementById("suggestionCount");
+const suggestionFilter = document.getElementById("suggestionFilter");
+const adminSuggestionList = document.getElementById("adminSuggestionList");
+const suggestionAdminMessage = document.getElementById("suggestionAdminMessage");
+
+
 // ======================================
-// 3. ADMIN VARIABLES
+// 2. ADMIN VARIABLES
 // ======================================
 
 let currentAdmin = null;
 
 let stopAnnouncements = null;
 let stopStudents = null;
+let stopSuggestions = null;
 
 let allStudents = [];
+let allSuggestions = [];
 
 
 // ======================================
-// 4. FORMAT DATES
+// 3. FORMAT DATES
 // ======================================
 
 function formatDate(timestamp) {
@@ -97,7 +107,7 @@ function formatStudentDate(timestamp) {
 
 
 // ======================================
-// 5. CREATE ANNOUNCEMENT CARD
+// 4. CREATE ANNOUNCEMENT CARD
 // ======================================
 
 function createAnnouncementCard(data, documentId, allowDelete = false) {
@@ -119,10 +129,7 @@ function createAnnouncementCard(data, documentId, allowDelete = false) {
     date.className = "date";
     date.textContent = formatDate(data.createdAt);
 
-    card.appendChild(category);
-    card.appendChild(title);
-    card.appendChild(message);
-    card.appendChild(date);
+    card.append(category, title, message, date);
 
 
     if (allowDelete) {
@@ -172,7 +179,7 @@ function createAnnouncementCard(data, documentId, allowDelete = false) {
 
 
 // ======================================
-// 6. VERIFY ADMINISTRATOR
+// 5. CHECK ADMINISTRATOR LOGIN
 // ======================================
 
 onAuthStateChanged(auth, async (user) => {
@@ -184,52 +191,61 @@ onAuthStateChanged(auth, async (user) => {
 
     }
 
+    try {
 
-    // CHECK ADMIN EMAIL
+        const adminRef = doc(db, "admins", user.uid);
 
-    if (
-        !user.email ||
-        user.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()
-    ) {
+        const adminSnap = await getDoc(adminRef);
 
-        alert("Access denied. Administrator permission required.");
+        if (!adminSnap.exists() || adminSnap.data().role !== "admin") {
 
-        window.location.replace("dashboard.html");
+            alert("Access denied. Administrator permission required.");
 
-        return;
+            window.location.replace("dashboard.html");
+            return;
+
+        }
+
+        currentAdmin = user;
+
+
+        // ADMIN PROFILE
+
+        const email = user.email || "Administrator";
+
+        const name = user.displayName || email.split("@")[0];
+
+        adminEmail.textContent = "Logged in as: " + email;
+
+        adminName.textContent = name;
+
+        adminAvatar.textContent = name.charAt(0).toUpperCase();
+
+        settingsAdminEmail.textContent = email;
+
+
+        // LOAD ADMIN DATA
+
+        loadAnnouncements();
+
+        loadStudents();
+
+        loadSuggestions();
+
+    } catch (error) {
+
+        console.error("Admin verification error:", error);
+
+        adminEmail.textContent =
+            "Unable to verify administrator access. Check your connection and refresh.";
 
     }
-
-
-    currentAdmin = user;
-
-
-    // ADMIN PROFILE
-
-    const email = user.email;
-
-    const name = user.displayName || email.split("@")[0];
-
-    adminEmail.textContent = "Logged in as: " + email;
-
-    adminName.textContent = name;
-
-    adminAvatar.textContent = name.charAt(0).toUpperCase();
-
-    settingsAdminEmail.textContent = email;
-
-
-    // LOAD ADMIN DATA
-
-    loadAnnouncements();
-
-    loadStudents();
 
 });
 
 
 // ======================================
-// 7. PUBLISH ANNOUNCEMENT
+// 6. PUBLISH ANNOUNCEMENT
 // ======================================
 
 announcementForm.addEventListener("submit", async (event) => {
@@ -246,7 +262,6 @@ announcementForm.addEventListener("submit", async (event) => {
         return;
 
     }
-
 
     const title = announcementTitle.value.trim();
 
@@ -321,7 +336,7 @@ announcementForm.addEventListener("submit", async (event) => {
 
 
 // ======================================
-// 8. LOAD ANNOUNCEMENTS
+// 7. LOAD ANNOUNCEMENTS IN REAL TIME
 // ======================================
 
 function loadAnnouncements() {
@@ -335,9 +350,7 @@ function loadAnnouncements() {
 
 
     if (stopAnnouncements) {
-
         stopAnnouncements();
-
     }
 
 
@@ -356,11 +369,11 @@ function loadAnnouncements() {
 
             if (snapshot.empty) {
 
-                announcementList.textContent =
-                    "No announcements have been published yet.";
+                announcementList.innerHTML =
+                    '<p class="empty">No announcements have been published yet.</p>';
 
-                overviewAnnouncements.textContent =
-                    "No recent announcements yet.";
+                overviewAnnouncements.innerHTML =
+                    '<p class="empty">No recent announcements yet.</p>';
 
                 return;
 
@@ -404,6 +417,7 @@ function loadAnnouncements() {
 
         },
 
+
         (error) => {
 
             console.error("Announcement loading error:", error);
@@ -422,20 +436,17 @@ function loadAnnouncements() {
 
 
 // ======================================
-// 9. LOAD REGISTERED STUDENTS
+// 8. LOAD REGISTERED STUDENTS
 // ======================================
 
 function loadStudents() {
 
     if (stopStudents) {
-
         stopStudents();
-
     }
 
-
-    studentList.textContent = "Loading registered students...";
-
+    studentList.innerHTML =
+        '<p class="empty">Loading registered students...</p>';
 
     const usersRef = collection(db, "users");
 
@@ -447,11 +458,8 @@ function loadStudents() {
         (snapshot) => {
 
             allStudents = snapshot.docs.map(documentSnapshot => ({
-
                 id: documentSnapshot.id,
-
                 ...documentSnapshot.data()
-
             }));
 
 
@@ -468,7 +476,7 @@ function loadStudents() {
             });
 
 
-            // UPDATE COUNTS
+            // UPDATE BOTH STUDENT COUNTS
 
             studentCount.textContent = allStudents.length;
 
@@ -483,15 +491,16 @@ function loadStudents() {
 
         },
 
+
         (error) => {
 
             console.error("Student loading error:", error);
 
             studentList.textContent =
-                "Unable to load student records: " + error.message;
+                "Unable to load students: " + error.message;
 
             studentMessage.textContent =
-                "Check your Firestore security rules and internet connection.";
+                "Check your Firestore permissions and internet connection.";
 
             studentMessage.style.color = "red";
 
@@ -503,7 +512,7 @@ function loadStudents() {
 
 
 // ======================================
-// 10. DISPLAY STUDENTS
+// 9. DISPLAY STUDENTS
 // ======================================
 
 function displayStudents(students) {
@@ -539,21 +548,13 @@ function displayStudents(students) {
 
 
     const headers = [
-
         "Full Name",
-
         "Matric Number",
-
         "Email",
-
         "Phone",
-
         "Department",
-
         "Date Registered"
-
     ];
-
 
     const thead = document.createElement("thead");
 
@@ -627,7 +628,7 @@ function displayStudents(students) {
 
 
 // ======================================
-// 11. SEARCH STUDENTS
+// 10. SEARCH AND FILTER STUDENTS
 // ======================================
 
 function filterStudents() {
@@ -676,6 +677,382 @@ studentSearch.addEventListener("input", filterStudents);
 
 
 // ======================================
+// 11. SUGGESTION MANAGEMENT
+// ======================================
+
+const suggestionStatuses = {
+
+    pending: "Pending",
+
+    reviewing: "Under Review",
+
+    considering: "Under Consideration",
+
+    implemented: "Implemented",
+
+    declined: "Declined"
+
+};
+
+
+// LOAD SUGGESTIONS IN REAL TIME
+
+function loadSuggestions() {
+
+    if (stopSuggestions) {
+
+        stopSuggestions();
+
+        stopSuggestions = null;
+
+    }
+
+
+    adminSuggestionList.innerHTML =
+        '<div class="empty">Loading suggestions...</div>';
+
+
+    const suggestionsQuery = query(
+
+        collection(db, "suggestions"),
+
+        orderBy("createdAt", "desc")
+
+    );
+
+
+    stopSuggestions = onSnapshot(
+
+        suggestionsQuery,
+
+        (snapshot) => {
+
+            allSuggestions = snapshot.docs.map(item => ({
+
+                id: item.id,
+
+                ...item.data()
+
+            }));
+
+
+            suggestionCount.textContent = allSuggestions.length;
+
+
+            displayAdminSuggestions(allSuggestions);
+
+        },
+
+
+        (error) => {
+
+            console.error("Suggestion loading error:", error);
+
+            adminSuggestionList.textContent =
+                "Unable to load suggestions: " + error.message;
+
+            suggestionAdminMessage.textContent =
+                "Check your Firestore permissions and connection.";
+
+            suggestionAdminMessage.style.color = "red";
+
+        }
+
+    );
+
+}
+
+
+// DISPLAY SUGGESTIONS
+
+function displayAdminSuggestions(suggestions) {
+
+    adminSuggestionList.replaceChildren();
+
+
+    const selectedFilter = suggestionFilter.value;
+
+
+    const filteredSuggestions = suggestions.filter(suggestion => {
+
+        return selectedFilter === "all"
+            || (suggestion.status || "pending") === selectedFilter;
+
+    });
+
+
+    if (filteredSuggestions.length === 0) {
+
+        const empty = document.createElement("div");
+
+        empty.className = "empty";
+
+        empty.textContent = suggestions.length === 0
+            ? "No student suggestions have been submitted yet."
+            : "No suggestions match this filter.";
+
+        adminSuggestionList.appendChild(empty);
+
+        return;
+
+    }
+
+
+    filteredSuggestions.forEach(suggestion => {
+
+        const card = document.createElement("div");
+
+        card.className = "admin-suggestion";
+
+
+        // CATEGORY
+
+        const category = document.createElement("span");
+
+        category.className = "category";
+
+        category.textContent = suggestion.category || "General";
+
+
+        // TITLE
+
+        const title = document.createElement("h3");
+
+        title.textContent = suggestion.title || "Untitled suggestion";
+
+
+        // DESCRIPTION
+
+        const description = document.createElement("p");
+
+        description.textContent =
+            suggestion.description || "No description provided.";
+
+
+        // STUDENT NAME
+
+        const student = document.createElement("div");
+
+        student.className = "suggestion-meta";
+
+        student.textContent =
+            "Submitted by: " + (suggestion.fullName || "Unknown student");
+
+
+        // STUDENT EMAIL
+
+        const email = document.createElement("div");
+
+        email.className = "suggestion-meta";
+
+        email.textContent =
+            "Email: " + (suggestion.email || "Not provided");
+
+
+        // SUBMISSION DATE
+
+        const date = document.createElement("div");
+
+        date.className = "suggestion-meta";
+
+        date.textContent =
+            "Submitted: " + formatDate(suggestion.createdAt);
+
+
+        // CURRENT STATUS
+
+        const status = document.createElement("span");
+
+        status.className = "suggestion-status-label";
+
+        status.textContent =
+            suggestionStatuses[suggestion.status] || "Pending";
+
+
+        // ACTIONS CONTAINER
+
+        const actions = document.createElement("div");
+
+        actions.className = "suggestion-actions";
+
+
+        // STATUS SELECTOR
+
+        const statusSelect = document.createElement("select");
+
+        statusSelect.setAttribute(
+            "aria-label",
+            "Change suggestion status"
+        );
+
+
+        const currentStatus = suggestion.status || "pending";
+
+
+        Object.entries(suggestionStatuses).forEach(([value, label]) => {
+
+            const option = document.createElement("option");
+
+            option.value = value;
+
+            option.textContent = label;
+
+            option.selected = currentStatus === value;
+
+            statusSelect.appendChild(option);
+
+        });
+
+
+        // UPDATE STATUS
+
+        statusSelect.addEventListener("change", async () => {
+
+            const previousStatus = currentStatus;
+
+            const newStatus = statusSelect.value;
+
+            statusSelect.disabled = true;
+
+
+            try {
+
+                await updateDoc(
+
+                    doc(db, "suggestions", suggestion.id),
+
+                    {
+                        status: newStatus
+                    }
+
+                );
+
+
+                suggestionAdminMessage.textContent =
+                    "Suggestion status updated successfully.";
+
+                suggestionAdminMessage.style.color = "green";
+
+
+            } catch (error) {
+
+                console.error("Status update error:", error);
+
+                suggestionAdminMessage.textContent =
+                    "Unable to update status: " + error.message;
+
+                suggestionAdminMessage.style.color = "red";
+
+                statusSelect.value = previousStatus;
+
+            } finally {
+
+                statusSelect.disabled = false;
+
+            }
+
+        });
+
+
+        // DELETE BUTTON
+
+        const deleteButton = document.createElement("button");
+
+        deleteButton.className = "suggestion-delete";
+
+        deleteButton.textContent = "Delete";
+
+
+        deleteButton.addEventListener("click", async () => {
+
+            const confirmed = confirm(
+                "Are you sure you want to permanently delete this suggestion?"
+            );
+
+            if (!confirmed) return;
+
+
+            deleteButton.disabled = true;
+
+            deleteButton.textContent = "Deleting...";
+
+
+            try {
+
+                await deleteDoc(
+
+                    doc(db, "suggestions", suggestion.id)
+
+                );
+
+
+                suggestionAdminMessage.textContent =
+                    "Suggestion deleted successfully.";
+
+                suggestionAdminMessage.style.color = "green";
+
+
+            } catch (error) {
+
+                console.error("Suggestion deletion error:", error);
+
+                suggestionAdminMessage.textContent =
+                    "Unable to delete suggestion: " + error.message;
+
+                suggestionAdminMessage.style.color = "red";
+
+                deleteButton.disabled = false;
+
+                deleteButton.textContent = "Delete";
+
+            }
+
+        });
+
+
+        actions.append(statusSelect, deleteButton);
+
+
+        // BUILD CARD
+
+        card.append(
+
+            category,
+
+            title,
+
+            description,
+
+            student,
+
+            email,
+
+            date,
+
+            status,
+
+            actions
+
+        );
+
+
+        adminSuggestionList.appendChild(card);
+
+    });
+
+}
+
+
+// FILTER SUGGESTIONS
+
+suggestionFilter.addEventListener("change", () => {
+
+    displayAdminSuggestions(allSuggestions);
+
+});
+
+
+// ======================================
 // 12. LOGOUT
 // ======================================
 
@@ -689,21 +1066,24 @@ logoutBtn.addEventListener("click", async () => {
     try {
 
         if (stopAnnouncements) {
-
             stopAnnouncements();
-
+            stopAnnouncements = null;
         }
 
         if (stopStudents) {
-
             stopStudents();
-
+            stopStudents = null;
         }
+
+        if (stopSuggestions) {
+            stopSuggestions();
+            stopSuggestions = null;
+        }
+
 
         await signOut(auth);
 
         window.location.replace("login.html");
-
 
     } catch (error) {
 
@@ -714,7 +1094,5 @@ logoutBtn.addEventListener("click", async () => {
         logoutBtn.disabled = false;
 
         logoutBtn.textContent = "Logout";
-
     }
-
 });
