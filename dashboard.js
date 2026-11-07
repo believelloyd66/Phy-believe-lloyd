@@ -12,11 +12,13 @@ import {
     collection,
     query,
     where,
-    onSnapshot
+    onSnapshot,
+    addDoc,
+    serverTimestamp
 } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
 
 // ======================================
-// 1. ELEMENTS
+// 1. ELEMENTS AND SHARED VARIABLES
 // ======================================
 
 const logoutButton = document.getElementById("logoutButton");
@@ -25,6 +27,22 @@ const homeContainer = document.getElementById("homeAnnouncements");
 const updatesContainer = document.getElementById("allAnnouncements");
 
 let stopStudentAnnouncements = null;
+let currentStudent = null;
+let stopMySuggestions = null;
+
+// SUGGESTION ELEMENTS
+
+const suggestionForm =
+    document.getElementById("suggestionForm");
+
+const suggestionSubmit =
+    document.getElementById("suggestionSubmit");
+
+const suggestionMessage =
+    document.getElementById("suggestionMessage");
+
+const mySuggestions =
+    document.getElementById("mySuggestions");
 
 
 // ======================================
@@ -35,7 +53,8 @@ const pageTitles = {
     home: "Welcome Home",
     updates: "Department Updates",
     courses: "Courses & Learning",
-    gallery: "Department Gallery"
+    gallery: "Department Gallery",
+    suggestions: "Suggestion Box"
 };
 
 
@@ -98,15 +117,10 @@ function loadStudentAnnouncements() {
         return;
     }
 
-    // Fetch only published announcements.
-    // No orderBy means no composite index is needed.
-
     const announcementsQuery = query(
         collection(db, "announcements"),
         where("status", "==", "published")
     );
-
-    // Stop any previous listener.
 
     if (stopStudentAnnouncements) {
         stopStudentAnnouncements();
@@ -121,27 +135,21 @@ function loadStudentAnnouncements() {
             homeContainer.replaceChildren();
             updatesContainer.replaceChildren();
 
-            // Check whether announcements exist.
-
             if (snapshot.empty) {
 
-                homeContainer.innerHTML =
-                    '<div class="empty">No announcements yet.</div>';
+                homeContainer.textContent =
+                    "No announcements yet.";
 
-                updatesContainer.innerHTML =
-                    '<div class="empty">No departmental announcements have been published yet.</div>';
+                updatesContainer.textContent =
+                    "No departmental announcements have been published yet.";
 
                 return;
             }
-
-            // Convert Firestore documents into an array.
 
             const announcements = snapshot.docs.map((documentSnapshot) => ({
                 id: documentSnapshot.id,
                 ...documentSnapshot.data()
             }));
-
-            // Sort announcements from newest to oldest.
 
             announcements.sort((a, b) => {
 
@@ -152,17 +160,11 @@ function loadStudentAnnouncements() {
 
             });
 
-            // Display announcements.
-
             announcements.forEach((data, index) => {
-
-                // Display every announcement on Updates.
 
                 updatesContainer.appendChild(
                     createStudentAnnouncement(data)
                 );
-
-                // Display only the latest three on Home.
 
                 if (index < 3) {
 
@@ -183,8 +185,6 @@ function loadStudentAnnouncements() {
                 error
             );
 
-            console.error("Firestore error code:", error.code);
-
             homeContainer.textContent =
                 "Unable to load announcements. Please refresh.";
 
@@ -199,7 +199,155 @@ function loadStudentAnnouncements() {
 
 
 // ======================================
-// 6. CHECK STUDENT LOGIN AND LOAD PROFILE
+// 6. SUGGESTION STATUS
+// ======================================
+
+function getSuggestionStatus(status) {
+
+    const statuses = {
+        pending: "Pending",
+        reviewing: "Under Review",
+        considering: "Under Consideration",
+        implemented: "Implemented",
+        declined: "Declined"
+    };
+
+    return statuses[status] || "Pending";
+
+}
+
+
+// ======================================
+// 7. DISPLAY STUDENT SUGGESTIONS
+// ======================================
+
+function displayMySuggestions(suggestions) {
+
+    if (!mySuggestions) return;
+
+    mySuggestions.replaceChildren();
+
+    if (suggestions.length === 0) {
+
+        const empty = document.createElement("div");
+        empty.className = "empty";
+
+        empty.textContent =
+            "You haven't submitted any suggestions yet.";
+
+        mySuggestions.appendChild(empty);
+
+        return;
+
+    }
+
+    suggestions.forEach((suggestion) => {
+
+        const card = document.createElement("div");
+        card.className = "update-item";
+
+        const category = document.createElement("span");
+        category.className = "update-tag";
+        category.textContent = suggestion.category || "GENERAL";
+
+        const title = document.createElement("h3");
+        title.textContent = suggestion.title || "Untitled suggestion";
+
+        const description = document.createElement("p");
+        description.textContent = suggestion.description || "";
+
+        const status = document.createElement("div");
+        status.className = "suggestion-status";
+
+        status.textContent =
+            "Status: " + getSuggestionStatus(suggestion.status);
+
+        const date = document.createElement("div");
+        date.className = "update-date";
+
+        date.textContent = suggestion.createdAt?.toDate
+            ? suggestion.createdAt.toDate().toLocaleString()
+            : "Submission date unavailable";
+
+        card.append(
+            category,
+            title,
+            description,
+            status,
+            date
+        );
+
+        mySuggestions.appendChild(card);
+
+    });
+
+}
+
+
+// ======================================
+// 8. LOAD STUDENT SUBMISSIONS
+// ======================================
+
+function loadMySuggestions(user) {
+
+    if (!mySuggestions) return;
+
+    if (stopMySuggestions) {
+        stopMySuggestions();
+        stopMySuggestions = null;
+    }
+
+    mySuggestions.textContent =
+        "Loading your suggestions...";
+
+    const suggestionsQuery = query(
+        collection(db, "suggestions"),
+        where("userId", "==", user.uid)
+    );
+
+    stopMySuggestions = onSnapshot(
+
+        suggestionsQuery,
+
+        (snapshot) => {
+
+            const suggestions = snapshot.docs.map((item) => ({
+                id: item.id,
+                ...item.data()
+            }));
+
+            suggestions.sort((a, b) => {
+
+                const dateA = a.createdAt?.toMillis?.() || 0;
+                const dateB = b.createdAt?.toMillis?.() || 0;
+
+                return dateB - dateA;
+
+            });
+
+            displayMySuggestions(suggestions);
+
+        },
+
+        (error) => {
+
+            console.error(
+                "Suggestion loading error:",
+                error
+            );
+
+            mySuggestions.textContent =
+                "Unable to load your suggestions. Please refresh.";
+
+        }
+
+    );
+
+}
+
+
+// ======================================
+// 9. STUDENT AUTHENTICATION AND PROFILE
 // ======================================
 
 onAuthStateChanged(auth, async (user) => {
@@ -219,7 +367,9 @@ onAuthStateChanged(auth, async (user) => {
 
         if (!profileSnapshot.exists()) {
 
-            alert("Student profile not found. Please create a student account.");
+            alert(
+                "Student profile not found. Please create a student account."
+            );
 
             await signOut(auth);
 
@@ -232,7 +382,9 @@ onAuthStateChanged(auth, async (user) => {
 
         if (profile.platform !== "PHY EDU CONNECT") {
 
-            alert("This account does not have a PHY EDU CONNECT student profile.");
+            alert(
+                "This account does not have a PHY EDU CONNECT student profile."
+            );
 
             await signOut(auth);
 
@@ -241,20 +393,54 @@ onAuthStateChanged(auth, async (user) => {
 
         }
 
-        // Get student name.
-
         const fullName =
             profile.fullName || user.displayName || "Student";
 
-        // Display student information.
+        // SET CURRENT STUDENT
+
+        currentStudent = {
+            uid: user.uid,
+            fullName: fullName,
+            email: user.email || ""
+        };
+
+        // LOAD PERSONAL SUGGESTIONS
+
+        loadMySuggestions(user);
+
+        // SUGGESTION PROFILE DISPLAY
+
+        const suggestionUserName =
+            document.getElementById("suggestionUserName");
+
+        const suggestionAvatar =
+            document.getElementById("suggestionAvatar");
+
+        if (suggestionUserName) {
+            suggestionUserName.textContent = fullName;
+        }
+
+        if (suggestionAvatar) {
+            suggestionAvatar.textContent =
+                fullName.charAt(0).toUpperCase();
+        }
+
+        // MAIN PROFILE DISPLAY
 
         const userName = document.getElementById("userName");
         const userAvatar = document.getElementById("userAvatar");
 
-        const profileFullName = document.getElementById("profileFullName");
-        const profileMatric = document.getElementById("profileMatric");
-        const profileEmail = document.getElementById("profileEmail");
-        const profilePhone = document.getElementById("profilePhone");
+        const profileFullName =
+            document.getElementById("profileFullName");
+
+        const profileMatric =
+            document.getElementById("profileMatric");
+
+        const profileEmail =
+            document.getElementById("profileEmail");
+
+        const profilePhone =
+            document.getElementById("profilePhone");
 
         if (userName) {
             userName.textContent = fullName;
@@ -284,7 +470,7 @@ onAuthStateChanged(auth, async (user) => {
                 profile.phone || "Not provided";
         }
 
-        // Load announcements after confirming the student profile.
+        // LOAD ANNOUNCEMENTS
 
         loadStudentAnnouncements();
 
@@ -300,9 +486,8 @@ onAuthStateChanged(auth, async (user) => {
 
 });
 
-
 // ======================================
-// 7. LOGOUT
+// 10. LOGOUT
 // ======================================
 
 if (logoutButton) {
@@ -314,12 +499,25 @@ if (logoutButton) {
 
         try {
 
+            // STOP ANNOUNCEMENT LISTENER
+
             if (stopStudentAnnouncements) {
 
                 stopStudentAnnouncements();
                 stopStudentAnnouncements = null;
 
             }
+
+            // STOP SUGGESTION LISTENER
+
+            if (stopMySuggestions) {
+
+                stopMySuggestions();
+                stopMySuggestions = null;
+
+            }
+
+            currentStudent = null;
 
             await signOut(auth);
 
@@ -342,7 +540,7 @@ if (logoutButton) {
 
 
 // ======================================
-// 8. DASHBOARD PAGE NAVIGATION
+// 11. DASHBOARD PAGE NAVIGATION
 // ======================================
 
 function showPage(page) {
@@ -388,7 +586,27 @@ window.showPage = showPage;
 
 
 // ======================================
-// 9. NAVIGATION BUTTONS
+// 12. OPEN PAGE FROM URL HASH
+// ======================================
+
+function openPageFromHash() {
+
+    const requestedPage =
+        window.location.hash.substring(1);
+
+    if (pageTitles[requestedPage]) {
+        showPage(requestedPage);
+    }
+
+}
+
+openPageFromHash();
+
+window.addEventListener("hashchange", openPageFromHash);
+
+
+// ======================================
+// 13. NAVIGATION BUTTONS
 // ======================================
 
 document.querySelectorAll("[data-page]").forEach((button) => {
@@ -403,10 +621,11 @@ document.querySelectorAll("[data-page]").forEach((button) => {
 
 
 // ======================================
-// 10. COURSE SEARCH
+// 14. COURSE SEARCH
 // ======================================
 
-const courseSearch = document.getElementById("courseSearch");
+const courseSearch =
+    document.getElementById("courseSearch");
 
 if (courseSearch) {
 
@@ -422,6 +641,124 @@ if (courseSearch) {
                 content.includes(searchValue) ? "block" : "none";
 
         });
+
+    });
+
+}
+
+
+// ======================================
+// 15. SUBMIT SUGGESTION
+// ======================================
+
+if (suggestionForm) {
+
+    suggestionForm.addEventListener("submit", async (event) => {
+
+        event.preventDefault();
+
+        if (!currentStudent) {
+
+            alert("Your student account could not be verified.");
+            return;
+
+        }
+
+        const category =
+            document.getElementById("suggestionCategory").value;
+
+        const title =
+            document.getElementById("suggestionTitle").value.trim();
+
+        const description =
+            document.getElementById("suggestionDescription").value.trim();
+
+
+        // VALIDATION
+
+        if (!category || !title || !description) {
+
+            suggestionMessage.textContent =
+                "Please complete all fields.";
+
+            return;
+
+        }
+
+        if (title.length < 3 || description.length < 10) {
+
+            suggestionMessage.textContent =
+                "The title must have at least 3 characters and the description at least 10.";
+
+            return;
+
+        }
+
+        if (title.length > 100 || description.length > 2000) {
+
+            suggestionMessage.textContent =
+                "One of your entries exceeds the permitted length.";
+
+            return;
+
+        }
+
+
+        // PREVENT MULTIPLE SUBMISSIONS
+
+        suggestionSubmit.disabled = true;
+        suggestionSubmit.textContent = "Submitting...";
+
+        suggestionMessage.textContent = "";
+
+
+        try {
+
+            await addDoc(collection(db, "suggestions"), {
+
+                userId: currentStudent.uid,
+
+                fullName: currentStudent.fullName,
+
+                email: currentStudent.email,
+
+                category: category,
+
+                title: title,
+
+                description: description,
+
+                status: "pending",
+
+                createdAt: serverTimestamp()
+
+            });
+
+
+            // SUCCESS
+
+            suggestionMessage.textContent =
+                "Your suggestion has been submitted successfully.";
+
+            suggestionMessage.style.color = "var(--green)";
+
+            suggestionForm.reset();
+
+        } catch (error) {
+
+            console.error("Suggestion submission error:", error);
+
+            suggestionMessage.textContent =
+                "Unable to submit your suggestion. Please try again.";
+
+            suggestionMessage.style.color = "#C0392B";
+
+        } finally {
+
+            suggestionSubmit.disabled = false;
+            suggestionSubmit.textContent = "Submit Suggestion";
+
+        }
 
     });
 
