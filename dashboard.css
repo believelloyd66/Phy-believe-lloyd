@@ -755,3 +755,181 @@ footer {
         display: none;
     }
 }
+
+/* ==================================
+   SUGGESTION BOX
+================================== */
+
+.suggestion-user {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 20px;
+}
+
+.suggestion-user-icon {
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    background: var(--navy);
+    color: white;
+    border-radius: 50%;
+    font-weight: 800;
+}
+
+.suggestion-user small {
+    font-size: 9px;
+    color: var(--blue);
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.suggestion-user h3 {
+    font-size: 14px;
+    color: var(--navy);
+    margin: 3px 0;
+}
+
+.suggestion-user p {
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.suggestion-panel {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 25px;
+}
+
+.suggestion-panel-heading h2,
+.suggestion-history-heading h2 {
+    color: var(--navy);
+    font-size: 17px;
+}
+
+.suggestion-panel-heading p,
+.suggestion-history-heading p {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 6px;
+}
+
+.suggestion-field {
+    margin-top: 23px;
+}
+
+.suggestion-field label {
+    display: block;
+    color: var(--navy);
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 9px;
+}
+
+.suggestion-field input,
+.suggestion-field select,
+.suggestion-field textarea {
+    width: 100%;
+    padding: 13px 14px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: #FAFCFE;
+    color: var(--text);
+    outline: none;
+    font-size: 13px;
+}
+
+.suggestion-field textarea {
+    resize: vertical;
+    min-height: 130px;
+    line-height: 1.6;
+}
+
+.suggestion-field input:focus,
+.suggestion-field select:focus,
+.suggestion-field textarea:focus {
+    border-color: var(--blue);
+}
+
+.suggestion-field > small {
+    display: block;
+    text-align: right;
+    color: var(--muted);
+    font-size: 10px;
+    margin-top: 6px;
+}
+
+.suggestion-submit {
+    width: 100%;
+    margin-top: 22px;
+    padding: 14px;
+    background: var(--navy);
+    color: white;
+    border: none;
+    border-radius: 9px;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.suggestion-submit:hover {
+    background: var(--blue);
+}
+
+.suggestion-submit:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+.suggestion-message {
+    margin-top: 15px;
+    font-size: 12px;
+}
+
+.suggestion-history {
+    margin-top: 30px;
+}
+
+.suggestion-history-heading {
+    margin-bottom: 15px;
+}
+
+.suggestion-coming {
+    width: 100%;
+    text-align: left;
+    font: inherit;
+    cursor: pointer;
+}
+
+.suggestion-coming:hover {
+    transform: translateY(-3px);
+    border-color: #B5D5EF;
+}
+
+@media(max-width: 700px) {
+
+    .suggestion-panel {
+        padding: 19px;
+    }
+
+    .suggestion-user {
+        padding: 15px;
+    }
+
+}
+.suggestion-status {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 6px 10px;
+    background: var(--light-blue);
+    color: var(--blue);
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 800;
+}
