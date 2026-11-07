@@ -263,12 +263,18 @@
                         <span class="coming-badge">COMING SOON</span>
                     </div>
 
-                    <div class="coming-card">
-                        <div class="card-icon">💬</div>
-                        <h3>Suggestion Box</h3>
-                        <p>Share your ideas.</p>
-                        <span class="coming-badge">COMING SOON</span>
-                    </div>
+                    <button class="coming-card suggestion-coming"
+        onclick="showPage('suggestions')">
+
+    <div class="card-icon">💬</div>
+
+    <h3>Suggestion Box</h3>
+
+    <p>Share your ideas and help improve our community.</p>
+
+    <span class="coming-badge">OPEN</span>
+
+</button>
 
                 </div>
 
@@ -385,6 +391,132 @@
 
         </main>
 
+<!-- SUGGESTION BOX PAGE -->
+<div class="view" id="suggestions">
+
+    <div class="page-heading">
+        <h1>Suggestion Box</h1>
+        <p>
+            Your ideas can help make PHY EDU CONNECT
+            a better community for everyone.
+        </p>
+    </div>
+
+    <!-- STUDENT IDENTITY -->
+    <div class="suggestion-user">
+        <div class="suggestion-user-icon" id="suggestionAvatar">
+            U
+        </div>
+
+        <div>
+            <small>SUBMITTING AS</small>
+            <h3 id="suggestionUserName">Loading...</h3>
+            <p>Your name will be attached to your submission.</p>
+        </div>
+    </div>
+
+    <!-- SUGGESTION FORM -->
+    <div class="suggestion-panel">
+
+        <div class="suggestion-panel-heading">
+            <h2>Share your suggestion</h2>
+            <p>Tell us what you think we can improve or introduce.</p>
+        </div>
+
+        <form id="suggestionForm">
+
+            <div class="suggestion-field">
+
+                <label for="suggestionCategory">
+                    Suggestion Category
+                </label>
+
+                <select id="suggestionCategory" required>
+
+                    <option value="">Select a category</option>
+                    <option value="General">General</option>
+                    <option value="Student Affairs">Student Affairs</option>
+                    <option value="Events">Events</option>
+                    <option value="Games & Challenges">Games & Challenges</option>
+                    <option value="New Features">New Features</option>
+
+                </select>
+
+            </div>
+
+
+            <div class="suggestion-field">
+
+                <label for="suggestionTitle">
+                    Suggestion Title
+                </label>
+
+                <input
+                    type="text"
+                    id="suggestionTitle"
+                    placeholder="Give your suggestion a title"
+                    maxlength="100"
+                    required
+                >
+
+            </div>
+
+
+            <div class="suggestion-field">
+
+                <label for="suggestionDescription">
+                    Describe Your Suggestion
+                </label>
+
+                <textarea
+                    id="suggestionDescription"
+                    rows="6"
+                    maxlength="2000"
+                    placeholder="Explain your idea in detail..."
+                    required
+                ></textarea>
+
+                <small>Maximum 2,000 characters.</small>
+
+            </div>
+
+
+            <div id="suggestionMessage" class="suggestion-message"
+                 role="status" aria-live="polite"></div>
+
+
+            <button
+                type="submit"
+                class="suggestion-submit"
+                id="suggestionSubmit"
+            >
+                Submit Suggestion
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- SUBMISSION HISTORY -->
+    <div class="suggestion-history">
+
+        <div class="suggestion-history-heading">
+            <h2>My Suggestions</h2>
+            <p>Keep track of the suggestions you have submitted.</p>
+        </div>
+
+        <div id="mySuggestions">
+
+            <div class="empty">
+                Your submitted suggestions will appear here.
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
         <!-- FOOTER -->
         <footer>
