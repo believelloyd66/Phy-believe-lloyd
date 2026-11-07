@@ -393,7 +393,7 @@ button {
     line-height: 1.6;
 }
 
-/* ANNOUNCEMENT FORM */
+/* FORMS */
 
 label {
     display: block;
@@ -554,7 +554,7 @@ textarea {
     background: #FAFCFF;
 }
 
-/* COMING SOON */
+/* FEATURE CARDS */
 
 .feature-grid {
     display: grid;
@@ -603,7 +603,7 @@ textarea {
     padding: 6px 9px;
 }
 
-/* MORE PAGE LINKS */
+/* MORE LINKS */
 
 .more-link {
     width: 100%;
@@ -638,6 +638,84 @@ textarea {
     color: var(--muted);
     font-size: 10px;
     margin-top: 4px;
+}
+
+/* SUGGESTION MANAGEMENT */
+
+.suggestion-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+.suggestion-filter {
+    max-width: 350px;
+}
+
+.admin-suggestion {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 14px;
+}
+
+.admin-suggestion h3 {
+    color: var(--navy);
+    font-size: 15px;
+    margin: 8px 0;
+    overflow-wrap: anywhere;
+}
+
+.admin-suggestion p {
+    color: var(--text);
+    font-size: 12px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    margin: 10px 0;
+}
+
+.suggestion-meta {
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.8;
+}
+
+.suggestion-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.suggestion-actions select {
+    flex: 1;
+    min-width: 160px;
+    margin: 0;
+}
+
+.suggestion-delete {
+    background: #FFF0F0;
+    color: #C53030;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.suggestion-status-label {
+    display: inline-block;
+    background: var(--light-blue);
+    color: var(--blue);
+    border-radius: 20px;
+    padding: 5px 9px;
+    font-size: 10px;
+    font-weight: 700;
 }
 
 /* FOOTER */
@@ -834,6 +912,10 @@ footer {
         <span class="nav-icon">♧</span> Announcements
     </button>
 
+    <button class="nav-item" data-page="suggestions">
+        <span class="nav-icon">💡</span> Suggestions
+    </button>
+
     <button class="nav-item" data-page="students">
         <span class="nav-icon">♙</span> Students
     </button>
@@ -862,394 +944,393 @@ footer {
 
 <div class="main">
 
-    <header class="topbar">
+<header class="topbar">
 
-        <div>
-            <div class="page-title" id="pageTitle">
-                Admin Overview
-            </div>
-            <div class="page-subtitle">
-                PHY EDU CONNECT Administration
+    <div>
+        <div class="page-title" id="pageTitle">Admin Overview</div>
+        <div class="page-subtitle">PHY EDU CONNECT Administration</div>
+    </div>
+
+    <div class="top-right">
+
+        <span class="admin-badge">ADMINISTRATOR</span>
+
+        <div class="profile-summary">
+            <div class="avatar" id="adminAvatar">A</div>
+            <div class="profile-name" id="adminName">Administrator</div>
+        </div>
+
+        <button class="logout-button" id="logoutBtn" type="button">
+            Logout
+        </button>
+
+    </div>
+
+</header>
+
+<main class="content">
+
+<!-- OVERVIEW -->
+
+<section class="view active" id="overview">
+
+    <div class="welcome">
+        <div class="welcome-decoration">⚛</div>
+        <small>DEPARTMENT ADMINISTRATION</small>
+        <h1>Welcome to your Admin Dashboard.</h1>
+        <p id="adminEmail">Verifying administrator...</p>
+    </div>
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <div class="stat-icon">📢</div>
+            <div>
+                <p>Announcements</p>
+                <h2 id="announcementCount">—</h2>
             </div>
         </div>
 
-        <div class="top-right">
-
-            <span class="admin-badge">ADMINISTRATOR</span>
-
-            <div class="profile-summary">
-                <div class="avatar" id="adminAvatar">A</div>
-                <div class="profile-name" id="adminName">Administrator</div>
+        <div class="stat-card">
+            <div class="stat-icon">🎓</div>
+            <div>
+                <p>Registered Students</p>
+                <h2 id="studentCount">—</h2>
             </div>
-
-            <button class="logout-button" id="logoutBtn" type="button">
-                Logout
-            </button>
-
         </div>
 
-    </header>
-
-    <main class="content">
-
-        <!-- OVERVIEW -->
-
-        <section class="view active" id="overview">
-
-            <div class="welcome">
-                <div class="welcome-decoration">⚛</div>
-
-                <small>DEPARTMENT ADMINISTRATION</small>
-
-                <h1>Welcome to your Admin Dashboard.</h1>
-
-                <p id="adminEmail">
-                    Verifying administrator...
-                </p>
+        <div class="stat-card">
+            <div class="stat-icon">📚</div>
+            <div>
+                <p>Available Courses</p>
+                <h2 id="courseCount">Coming Soon</h2>
             </div>
+        </div>
 
-            <div class="stats-grid">
+    </div>
 
-                <div class="stat-card">
-                    <div class="stat-icon">📢</div>
-                    <div>
-                        <p>Announcements</p>
-                        <h2 id="announcementCount">—</h2>
-                    </div>
-                </div>
+    <div class="two-grid">
 
-                <div class="stat-card">
-                    <div class="stat-icon">🎓</div>
-                    <div>
-                        <p>Registered Students</p>
-                        <h2 id="studentCount">—</h2>
-                    </div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-icon">📚</div>
-                    <div>
-                        <p>Available Courses</p>
-                        <h2 id="courseCount">Coming Soon</h2>
-                    </div>
-                </div>
-
+        <div class="panel">
+            <div class="panel-title">Recent Announcements</div>
+            <div id="overviewAnnouncements">
+                <div class="empty">Your latest announcements will appear here.</div>
             </div>
+        </div>
 
-            <div class="two-grid">
+        <div class="panel">
+            <div class="panel-title">Quick Administration</div>
 
-                <div class="panel">
-                    <div class="panel-title">Recent Announcements</div>
-
-                    <div id="overviewAnnouncements">
-                        <div class="empty">
-                            Your latest announcements will appear here.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="panel">
-                    <div class="panel-title">Quick Administration</div>
-
-                    <button class="more-link" data-page="announcements">
-                        <span>📢</span>
-                        <span>
-                            <strong>Publish an Update</strong>
-                            <small>Create a new department announcement</small>
-                        </span>
-                    </button>
-
-                    <button class="more-link" data-page="students">
-                        <span>🎓</span>
-                        <span>
-                            <strong>Student Directory</strong>
-                            <small>View registered student accounts</small>
-                        </span>
-                    </button>
-
-                    <button class="more-link" data-page="settings">
-                        <span>⚙</span>
-                        <span>
-                            <strong>Administration Settings</strong>
-                            <small>Manage your admin preferences</small>
-                        </span>
-                    </button>
-
-                </div>
-
-            </div>
-
-        </section>
-
-        <!-- ANNOUNCEMENTS -->
-
-        <section class="view" id="announcements">
-
-            <div class="page-heading">
-                <h1>Department Announcements</h1>
-                <p>Create, publish and manage departmental updates.</p>
-            </div>
-
-            <div class="panel">
-
-                <div class="panel-title">Publish Department Update</div>
-
-                <form id="announcementForm">
-
-                    <label for="announcementTitle">
-                        Announcement Title
-                    </label>
-
-                    <input
-                        type="text"
-                        id="announcementTitle"
-                        placeholder="Enter announcement title"
-                        maxlength="120"
-                        required
-                    >
-
-                    <label for="announcementCategory">
-                        Category
-                    </label>
-
-                    <select id="announcementCategory" required>
-                        <option value="">Select category</option>
-                        <option value="General">General</option>
-                        <option value="Academic">Academic</option>
-                        <option value="Examination">Examination</option>
-                        <option value="Notice">Notice</option>
-                        <option value="Event">Event</option>
-                        <option value="Important">Important</option>
-                    </select>
-
-                    <label for="announcementMessage">
-                        Announcement Message
-                    </label>
-
-                    <textarea
-                        id="announcementMessage"
-                        placeholder="Write your announcement here..."
-                        maxlength="5000"
-                        required
-                    ></textarea>
-
-                    <button
-                        type="submit"
-                        class="publish"
-                        id="publishBtn"
-                    >
-                        Publish Announcement
-                    </button>
-
-                    <p class="message" id="formMessage"></p>
-
-                </form>
-
-            </div>
-
-            <div class="panel">
-
-                <div class="panel-title">Published Announcements</div>
-
-                <div id="announcementList">
-                    <p class="empty">Loading announcements...</p>
-                </div>
-
-            </div>
-
-        </section>
-
-        <!-- STUDENTS -->
-
-        <section class="view" id="students">
-
-            <div class="page-heading">
-                <h1>Student Management</h1>
-                <p>Manage and view registered PHY EDU CONNECT students.</p>
-            </div>
-
-            <div class="panel">
-
-                <div class="panel-title">Student Directory</div>
-
-                <div class="student-summary">
-
-                    <div>
-                        <p class="student-total-label">
-                            Total registered students
-                        </p>
-
-                        <h2 id="studentDirectoryCount"
-                            class="student-total">
-                            —
-                        </h2>
-                    </div>
-
-                    <span class="coming-badge">LIVE DIRECTORY</span>
-
-                </div>
-
-                <label for="studentSearch">
-                    Search Students
-                </label>
-
-                <input
-                    type="search"
-                    id="studentSearch"
-                    class="student-search"
-                    placeholder="Search name, matric number or email..."
-                >
-
-                <div id="studentList">
-                    <div class="empty">
-                        Loading registered students...
-                    </div>
-                </div>
-
-                <p class="message" id="studentMessage"></p>
-
-            </div>
-
-        </section>
-
-        <!-- COURSES -->
-
-        <section class="view" id="courses">
-
-            <div class="page-heading">
-                <h1>Course Management</h1>
-                <p>Organise the academic course directory.</p>
-            </div>
-
-            <div class="feature-grid">
-
-                <div class="feature-card">
-                    <div class="feature-icon">⚛</div>
-                    <h3>Physics Courses</h3>
-                    <p>Manage Physics course information.</p>
-                    <span class="coming-badge">COMING SOON</span>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">📖</div>
-                    <h3>Education Courses</h3>
-                    <p>Manage Education course information.</p>
-                    <span class="coming-badge">COMING SOON</span>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">📝</div>
-                    <h3>General Studies</h3>
-                    <p>Manage general studies information.</p>
-                    <span class="coming-badge">COMING SOON</span>
-                </div>
-
-            </div>
-
-        </section>
-
-        <!-- GALLERY -->
-
-        <section class="view" id="gallery">
-
-            <div class="page-heading">
-                <h1>Department Gallery</h1>
-                <p>Manage departmental pictures and memories.</p>
-            </div>
-
-            <div class="panel">
-                <div class="panel-title">Gallery Management</div>
-
-                <div class="empty">
-                    <div style="font-size:30px;margin-bottom:10px;">📸</div>
-                    Gallery management is being prepared.
-                    <br>
-                    <span class="coming-badge">COMING SOON</span>
-                </div>
-            </div>
-
-        </section>
-
-        <!-- SETTINGS -->
-
-        <section class="view" id="settings">
-
-            <div class="page-heading">
-                <h1>Administration Settings</h1>
-                <p>Manage your administrator account and platform preferences.</p>
-            </div>
-
-            <div class="panel">
-                <div class="panel-title">Administrator Account</div>
-
-                <p style="font-size:12px;color:var(--muted);line-height:1.8;">
-                    Signed-in administrator:
-                </p>
-
-                <p id="settingsAdminEmail"
-                   style="font-size:13px;font-weight:700;color:var(--navy);margin-top:5px;">
-                    Loading...
-                </p>
-            </div>
-
-            <div class="panel">
-                <div class="panel-title">Platform Information</div>
-
-                <p style="font-size:12px;color:var(--muted);line-height:1.9;">
-                    Platform: PHY EDU CONNECT<br>
-                    Version: 1.0<br>
-                    Access: Administrator
-                </p>
-            </div>
-
-        </section>
-
-        <!-- MORE: MOBILE LINKS -->
-
-        <section class="view" id="more">
-
-            <div class="page-heading">
-                <h1>More Administration</h1>
-                <p>Access additional management sections.</p>
-            </div>
-
-            <button class="more-link" data-page="courses">
-                <span>📚</span>
+            <button class="more-link" data-page="announcements">
+                <span>📢</span>
                 <span>
-                    <strong>Course Management</strong>
-                    <small>Manage the course directory</small>
+                    <strong>Publish an Update</strong>
+                    <small>Create a new department announcement</small>
                 </span>
             </button>
 
-            <button class="more-link" data-page="gallery">
-                <span>📸</span>
+            <button class="more-link" data-page="students">
+                <span>🎓</span>
                 <span>
-                    <strong>Department Gallery</strong>
-                    <small>Manage departmental pictures</small>
+                    <strong>Student Directory</strong>
+                    <small>View registered student accounts</small>
                 </span>
             </button>
 
             <button class="more-link" data-page="settings">
                 <span>⚙</span>
                 <span>
-                    <strong>Settings</strong>
-                    <small>Administrator account and platform information</small>
+                    <strong>Administration Settings</strong>
+                    <small>Manage your admin preferences</small>
                 </span>
             </button>
+        </div>
 
-        </section>
+    </div>
 
-    </main>
+</section>
 
-    <footer>
-        © 2026 PHY EDU CONNECT.
-        Department Administration.
-        <br><br>
-        An independent student-created platform.
-    </footer>
+<!-- ANNOUNCEMENTS -->
+
+<section class="view" id="announcements">
+
+    <div class="page-heading">
+        <h1>Department Announcements</h1>
+        <p>Create, publish and manage departmental updates.</p>
+    </div>
+
+    <div class="panel">
+        <div class="panel-title">Publish Department Update</div>
+
+        <form id="announcementForm">
+
+            <label for="announcementTitle">Announcement Title</label>
+            <input type="text" id="announcementTitle"
+                placeholder="Enter announcement title"
+                maxlength="120" required>
+
+            <label for="announcementCategory">Category</label>
+            <select id="announcementCategory" required>
+                <option value="">Select category</option>
+                <option value="General">General</option>
+                <option value="Academic">Academic</option>
+                <option value="Examination">Examination</option>
+                <option value="Notice">Notice</option>
+                <option value="Event">Event</option>
+                <option value="Important">Important</option>
+            </select>
+
+            <label for="announcementMessage">Announcement Message</label>
+            <textarea id="announcementMessage"
+                placeholder="Write your announcement here..."
+                maxlength="5000" required></textarea>
+
+            <button type="submit" class="publish" id="publishBtn">
+                Publish Announcement
+            </button>
+
+            <p class="message" id="formMessage"></p>
+
+        </form>
+    </div>
+
+    <div class="panel">
+        <div class="panel-title">Published Announcements</div>
+        <div id="announcementList">
+            <p class="empty">Loading announcements...</p>
+        </div>
+    </div>
+
+</section>
+
+<!-- SUGGESTION MANAGEMENT -->
+
+<section class="view" id="suggestions">
+
+    <div class="page-heading">
+        <h1>Suggestion Management</h1>
+        <p>Review student ideas, concerns and community suggestions.</p>
+    </div>
+
+    <div class="panel">
+
+        <div class="suggestion-summary">
+            <div>
+                <p class="student-total-label">Total submissions</p>
+                <h2 class="student-total" id="suggestionCount">—</h2>
+            </div>
+
+            <span class="coming-badge">LIVE SUBMISSIONS</span>
+        </div>
+
+        <div class="suggestion-filter">
+            <label for="suggestionFilter">Filter suggestions</label>
+
+            <select id="suggestionFilter">
+                <option value="all">All suggestions</option>
+                <option value="pending">Pending</option>
+                <option value="reviewing">Under Review</option>
+                <option value="considering">Under Consideration</option>
+                <option value="implemented">Implemented</option>
+                <option value="declined">Declined</option>
+            </select>
+        </div>
+
+        <div id="adminSuggestionList">
+            <div class="empty">Loading student suggestions...</div>
+        </div>
+
+        <p class="message" id="suggestionAdminMessage"></p>
+
+    </div>
+
+</section>
+
+<!-- STUDENTS -->
+
+<section class="view" id="students">
+
+    <div class="page-heading">
+        <h1>Student Management</h1>
+        <p>Manage and view registered PHY EDU CONNECT students.</p>
+    </div>
+
+    <div class="panel">
+
+        <div class="panel-title">Student Directory</div>
+
+        <div class="student-summary">
+
+            <div>
+                <p class="student-total-label">Total registered students</p>
+                <h2 id="studentDirectoryCount" class="student-total">—</h2>
+            </div>
+
+            <span class="coming-badge">LIVE DIRECTORY</span>
+
+        </div>
+
+        <label for="studentSearch">Search Students</label>
+
+        <input type="search" id="studentSearch"
+            class="student-search"
+            placeholder="Search name, matric number or email...">
+
+        <div id="studentList">
+            <div class="empty">Loading registered students...</div>
+        </div>
+
+        <p class="message" id="studentMessage"></p>
+
+    </div>
+
+</section>
+
+<!-- COURSES -->
+
+<section class="view" id="courses">
+
+    <div class="page-heading">
+        <h1>Course Management</h1>
+        <p>Organise the academic course directory.</p>
+    </div>
+
+    <div class="feature-grid">
+
+        <div class="feature-card">
+            <div class="feature-icon">⚛</div>
+            <h3>Physics Courses</h3>
+            <p>Manage Physics course information.</p>
+            <span class="coming-badge">COMING SOON</span>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">📖</div>
+            <h3>Education Courses</h3>
+            <p>Manage Education course information.</p>
+            <span class="coming-badge">COMING SOON</span>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">📝</div>
+            <h3>General Studies</h3>
+            <p>Manage general studies information.</p>
+            <span class="coming-badge">COMING SOON</span>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- GALLERY -->
+
+<section class="view" id="gallery">
+
+    <div class="page-heading">
+        <h1>Department Gallery</h1>
+        <p>Manage departmental pictures and memories.</p>
+    </div>
+
+    <div class="panel">
+        <div class="panel-title">Gallery Management</div>
+
+        <div class="empty">
+            <div style="font-size:30px;margin-bottom:10px;">📸</div>
+            Gallery management is being prepared.
+            <br>
+            <span class="coming-badge">COMING SOON</span>
+        </div>
+    </div>
+
+</section>
+
+<!-- SETTINGS -->
+
+<section class="view" id="settings">
+
+    <div class="page-heading">
+        <h1>Administration Settings</h1>
+        <p>Manage your administrator account and platform preferences.</p>
+    </div>
+
+    <div class="panel">
+        <div class="panel-title">Administrator Account</div>
+
+        <p style="font-size:12px;color:var(--muted);line-height:1.8;">
+            Signed-in administrator:
+        </p>
+
+        <p id="settingsAdminEmail"
+            style="font-size:13px;font-weight:700;color:var(--navy);margin-top:5px;">
+            Loading...
+        </p>
+    </div>
+
+    <div class="panel">
+        <div class="panel-title">Platform Information</div>
+
+        <p style="font-size:12px;color:var(--muted);line-height:1.9;">
+            Platform: PHY EDU CONNECT<br>
+            Version: 1.0<br>
+            Access: Administrator
+        </p>
+    </div>
+
+</section>
+
+<!-- MORE -->
+
+<section class="view" id="more">
+
+    <div class="page-heading">
+        <h1>More Administration</h1>
+        <p>Access additional management sections.</p>
+    </div>
+
+    <button class="more-link" data-page="suggestions">
+        <span>💡</span>
+        <span>
+            <strong>Suggestion Management</strong>
+            <small>Review student submissions</small>
+        </span>
+    </button>
+
+    <button class="more-link" data-page="courses">
+        <span>📚</span>
+        <span>
+            <strong>Course Management</strong>
+            <small>Manage the course directory</small>
+        </span>
+    </button>
+
+    <button class="more-link" data-page="gallery">
+        <span>📸</span>
+        <span>
+            <strong>Department Gallery</strong>
+            <small>Manage departmental pictures</small>
+        </span>
+    </button>
+
+    <button class="more-link" data-page="settings">
+        <span>⚙</span>
+        <span>
+            <strong>Settings</strong>
+            <small>Administrator account and platform information</small>
+        </span>
+    </button>
+
+</section>
+
+</main>
+
+<footer>
+    © 2026 PHY EDU CONNECT.
+    Department Administration.
+    <br><br>
+    An independent student-created platform.
+</footer>
 
 </div>
-
 </div>
 
 <!-- MOBILE BOTTOM NAVIGATION -->
@@ -1264,6 +1345,11 @@ footer {
     <button data-page="announcements">
         <span>♧</span>
         Updates
+    </button>
+
+    <button data-page="suggestions">
+        <span>💡</span>
+        Suggestions
     </button>
 
     <button data-page="students">
@@ -1281,9 +1367,11 @@ footer {
 <!-- PAGE NAVIGATION -->
 
 <script>
+
 const pageTitles = {
     overview: "Admin Overview",
     announcements: "Department Announcements",
+    suggestions: "Suggestion Management",
     students: "Student Management",
     courses: "Course Management",
     gallery: "Department Gallery",
@@ -1324,6 +1412,7 @@ document.querySelectorAll("[data-page]").forEach(button => {
         showAdminPage(button.dataset.page);
     });
 });
+
 </script>
 
 <!-- FIREBASE ADMIN FUNCTIONALITY -->
