@@ -14,75 +14,52 @@
 <body>
 <div class="layout">
 
-    <!-- DESKTOP SIDEBAR -->
-    <aside class="sidebar">
-
-        <div class="brand">
-            <div class="brand-icon">⚛</div>
-            <div>
-                <h2>PHY EDU CONNECT</h2>
-                <small>STUDENT COMMUNITY</small>
-            </div>
-        </div>
-
-        <div class="nav-label">MAIN MENU</div>
-
-        <button class="nav-item active" data-page="home">
-            <span class="nav-icon">⌂</span> Home
-        </button>
-
-        <button class="nav-item" data-page="updates">
-            <span class="nav-icon">♧</span> Updates
-        </button>
-
-        <button class="nav-item" data-page="courses">
-            <span class="nav-icon">▤</span> Courses
-        </button>
-
-        <button class="nav-item" data-page="gallery">
-            <span class="nav-icon">▧</span> Gallery
-        </button>
-
-        <div class="sidebar-bottom">
-            <p>PHY EDU CONNECT</p>
-            <p>Built for students, by students.</p>
-            <p>Version 1.0</p>
-        </div>
-
-    </aside>
-
-
-    <!-- MAIN AREA -->
+    <!-- PREMIUM TOP NAVIGATION -->
     <div class="main">
 
-        <!-- TOPBAR -->
-        <div class="topbar">
+        <header class="topbar">
+            <a class="brand" href="#home" onclick="showPage('home'); return false;" aria-label="PHY EDU CONNECT home">
+                <span class="brand-icon" aria-hidden="true">⚛</span>
+                <span class="brand-copy">
+                    <strong>PHY EDU CONNECT</strong>
+                    <small>STUDENT COMMUNITY</small>
+                </span>
+            </a>
 
-            <div>
-                <div class="page-title" id="pageTitle">
-                    Welcome Home
-                </div>
-
-                <div class="page-subtitle">
-                    Physics Education Community
-                </div>
-            </div>
+            <nav class="primary-nav" aria-label="Main navigation">
+                <button class="nav-item active" type="button" data-page="home">
+                    <span class="nav-icon" aria-hidden="true">⌂</span> Home
+                </button>
+                <button class="nav-item" type="button" data-page="updates">
+                    <span class="nav-icon" aria-hidden="true">♧</span> Updates
+                </button>
+                <button class="nav-item" type="button" data-page="courses">
+                    <span class="nav-icon" aria-hidden="true">▤</span> Courses
+                </button>
+                <button class="nav-item" type="button" data-page="gallery">
+                    <span class="nav-icon" aria-hidden="true">▧</span> Gallery
+                </button>
+                <button class="nav-item" type="button" data-page="suggestions">
+                    <span class="nav-icon" aria-hidden="true">✧</span> Suggestions
+                </button>
+            </nav>
 
             <div class="top-right">
-                <span class="version">VERSION 1.0</span>
-
                 <div class="profile-summary">
                     <div class="avatar" id="userAvatar">U</div>
                     <div class="profile-name" id="userName">Loading...</div>
                 </div>
-
-                <button class="logout-button" id="logoutButton" type="button">
-                    Log Out
+                <button class="settings-shortcut" type="button" data-page="settings" aria-label="Open settings" title="Settings">
+                    <span aria-hidden="true">⚙</span>
+                    <span class="settings-shortcut-label">Settings</span>
                 </button>
             </div>
+        </header>
 
+        <div class="page-context">
+            <div class="page-title" id="pageTitle">Welcome Home</div>
+            <div class="page-subtitle">Physics Education Community</div>
         </div>
-
 
         <main class="content">
 
@@ -389,8 +366,6 @@
 
             </div>
 
-        </main>
-
 <!-- SUGGESTION BOX PAGE -->
 <div class="view" id="suggestions">
 
@@ -518,6 +493,84 @@
 
 </div>
 
+            <!-- SETTINGS PAGE -->
+            <section class="view" id="settings">
+                <div class="page-heading">
+                    <h1>Settings & Account</h1>
+                    <p>Manage your student information and your PHY EDU CONNECT experience.</p>
+                </div>
+
+                <div class="settings-layout">
+                    <section class="settings-card settings-profile-card">
+                        <div class="settings-card-heading">
+                            <div>
+                                <span class="settings-eyebrow">YOUR ACCOUNT</span>
+                                <h2>Student profile</h2>
+                                <p>Your account information currently saved with the platform.</p>
+                            </div>
+                            <div class="settings-large-avatar" id="settingsAvatar">U</div>
+                        </div>
+                        <div class="settings-details">
+                            <div class="settings-detail">
+                                <span>Full name</span>
+                                <strong id="settingsFullName">Loading...</strong>
+                            </div>
+                            <div class="settings-detail">
+                                <span>Matriculation number</span>
+                                <strong id="settingsMatric">Loading...</strong>
+                            </div>
+                            <div class="settings-detail">
+                                <span>Email address</span>
+                                <strong id="settingsEmail">Loading...</strong>
+                            </div>
+                            <div class="settings-detail">
+                                <span>Phone number</span>
+                                <strong id="settingsPhone">Loading...</strong>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="settings-card">
+                        <span class="settings-eyebrow">PLATFORM</span>
+                        <h2>About PHY EDU CONNECT</h2>
+                        <p class="settings-description">An independent student-created space for Physics Education students to stay informed, explore academic resources and connect with one another.</p>
+                        <div class="settings-info-row">
+                            <span>Platform</span>
+                            <strong>PHY EDU CONNECT</strong>
+                        </div>
+                        <div class="settings-info-row">
+                            <span>Version</span>
+                            <strong>1.0</strong>
+                        </div>
+                        <div class="settings-info-row">
+                            <span>Account status</span>
+                            <strong class="account-status">Signed in</strong>
+                        </div>
+                    </section>
+
+                    <section class="settings-card settings-help-card">
+                        <span class="settings-eyebrow">NEED ASSISTANCE?</span>
+                        <h2>Help & feedback</h2>
+                        <p class="settings-description">Have an idea or something that needs attention? Use the Suggestion Box to send feedback to the platform team.</p>
+                        <button class="settings-action" type="button" data-page="suggestions">
+                            Open Suggestion Box <span aria-hidden="true">→</span>
+                        </button>
+                    </section>
+
+                    <section class="settings-card settings-security-card">
+                        <span class="settings-eyebrow">SESSION</span>
+                        <h2>Sign out of your account</h2>
+                        <p class="settings-description">You can sign out of PHY EDU CONNECT from here. Your account information and submitted suggestions will remain saved.</p>
+                        <button class="logout-button" id="logoutButton" type="button">
+                            <span aria-hidden="true">↪</span>
+                            <span class="logout-label">Log Out</span>
+                        </button>
+                    </section>
+                </div>
+            </section>
+
+        </main>
+
         <!-- FOOTER -->
         <footer>
             © 2026 PHY EDU CONNECT.
@@ -532,30 +585,7 @@
 </div>
 
 
-<!-- MOBILE BOTTOM NAVIGATION -->
-<nav class="bottom-nav">
 
-    <button class="active" data-page="home">
-        <span>⌂</span>
-        Home
-    </button>
-
-    <button data-page="updates">
-        <span>♧</span>
-        Updates
-    </button>
-
-    <button data-page="courses">
-        <span>▤</span>
-        Courses
-    </button>
-
-    <button data-page="gallery">
-        <span>▧</span>
-        Gallery
-    </button>
-
-</nav>
 
 <script type="module" src="./dashboard.js"></script>
 
