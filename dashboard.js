@@ -54,7 +54,8 @@ const pageTitles = {
     updates: "Department Updates",
     courses: "Courses & Learning",
     gallery: "Department Gallery",
-    suggestions: "Suggestion Box"
+    suggestions: "Suggestion Box",
+    settings: "Settings & Account"
 };
 
 
@@ -470,6 +471,33 @@ onAuthStateChanged(auth, async (user) => {
                 profile.phone || "Not provided";
         }
 
+        // SETTINGS PAGE PROFILE DETAILS
+        const settingsAvatar = document.getElementById("settingsAvatar");
+        const settingsFullName = document.getElementById("settingsFullName");
+        const settingsMatric = document.getElementById("settingsMatric");
+        const settingsEmail = document.getElementById("settingsEmail");
+        const settingsPhone = document.getElementById("settingsPhone");
+
+        if (settingsAvatar) {
+            settingsAvatar.textContent = fullName.charAt(0).toUpperCase();
+        }
+
+        if (settingsFullName) {
+            settingsFullName.textContent = fullName;
+        }
+
+        if (settingsMatric) {
+            settingsMatric.textContent = profile.matricNumber || "Not provided";
+        }
+
+        if (settingsEmail) {
+            settingsEmail.textContent = profile.email || user.email || "Not provided";
+        }
+
+        if (settingsPhone) {
+            settingsPhone.textContent = profile.phone || "Not provided";
+        }
+
         // LOAD ANNOUNCEMENTS
 
         loadStudentAnnouncements();
@@ -530,7 +558,8 @@ if (logoutButton) {
             alert("Could not log out. Please try again.");
 
             logoutButton.disabled = false;
-            logoutButton.textContent = "Log Out";
+            const logoutLabel = logoutButton.querySelector(".logout-label");
+            if (logoutLabel) logoutLabel.textContent = "Log Out";
 
         }
 
